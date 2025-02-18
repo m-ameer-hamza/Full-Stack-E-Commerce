@@ -94,21 +94,35 @@ function handleSubmit(formType) {
     if (!Object.values(errors).some((error) => error)) {
       console.log("Login Form is valid.", form);
       loginBtnClicked.value = true;
+      loginMutation.mutate();
     }
   }
 }
 
-//Query functions for APIs
+//Mutataion Query for Register
 const mutation = useMutation({
   mutationFn: () => register(form),
   retry: false,
 });
-
 watch(
   () => mutation.isSuccess.value,
   (isSuccess, wasSuccess) => {
     if (isSuccess && !wasSuccess) {
       toast.success("Registration Successful");
+      //redirect to login page
+      router.push("/login");
+    }
+  }
+);
+const loginMutation = useMutation({
+  mutationFn: () => login(form),
+  retry: false,
+});
+watch(
+  () => loginMutation.isSuccess.value,
+  (isSuccess, wasSuccess) => {
+    if (isSuccess && !wasSuccess) {
+      toast.success("Login Successful");
     }
   }
 );
@@ -191,7 +205,11 @@ watch(
           <template v-if="mutation.isLoading">
             <span>Register In .....</span>
             <!-- The spinner component with some right margin -->
-            <PulseLoader :loading="isLoading" color="#fff" class="mr-2" />
+            <PulseLoader
+              :loading="mutation.isLoading"
+              color="#fff"
+              class="mr-2"
+            />
           </template>
           <template v-else>
             <i class="pi pi-check mr-2"></i>

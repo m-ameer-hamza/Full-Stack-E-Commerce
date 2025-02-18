@@ -16,14 +16,9 @@ class AuthController extends Controller
         $userInfo['password'] = bcrypt($userInfo['password']);
         $userInfo['status'] = 'approved';
         $user = User::create($userInfo);
-        $token = $user->createToken('authToken')->plainTextToken;
-        //http-only cookie
-        // Life time is set as 1 day
-        $cookie=cookie('authToken',$token,60*24,'/',null,false,true);
         return response()->json([
             'message' => 'User Created Successfully',
-            'user' => ['name' => $user->name, 'email' => $user->email, 'role' => $user->role]
-        ], 201)->cookie($cookie);
+        ], 201);
 
     }
     public function login(LoginRequest $request){
@@ -35,11 +30,12 @@ class AuthController extends Controller
             ], 401);
         }
         $token = $user->createToken('authToken')->plainTextToken;
+        $cookie=cookie('authToken',$token,60*24,'/',null,false,true);
         return response()->json([
             'message' => 'Login Success',
             'token' => $token,
             'user' => ['name' => $user->name, 'email' => $user->email, 'role' => $user->role]
-        ], 200);
+        ], 200)->cookie($cookie);
     }
 
 
