@@ -1,10 +1,11 @@
 <script setup>
 import { defineProps, reactive, ref, watch } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import authAPI from "../../apis/authAPI.js";
 import { useMutation } from "@tanstack/vue-query";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import { useToast } from "vue-toastification";
+import { userSatore } from "../stores/userStore.js";
 
 // Define props using defineProps
 const props = defineProps({
@@ -29,6 +30,7 @@ const toast = useToast();
 const registerBtnClicked = ref(false);
 const loginBtnClicked = ref(false);
 const { register, login } = authAPI();
+const router = useRouter();
 
 const form = reactive({
   name: "",
@@ -123,6 +125,15 @@ watch(
   (isSuccess, wasSuccess) => {
     if (isSuccess && !wasSuccess) {
       toast.success("Login Successful");
+      //storing userData in the pinia
+      const userData = {
+        email: loginMutation.data.value.user.email,
+        name: loginMutation.data.value.user.name,
+        isAuthenticated: true,
+      };
+      const userStore = userSatore();
+      userStore.setUser(userData);
+      //redirect to home page
     }
   }
 );

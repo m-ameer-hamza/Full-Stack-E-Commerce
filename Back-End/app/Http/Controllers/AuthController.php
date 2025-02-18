@@ -33,7 +33,6 @@ class AuthController extends Controller
         $cookie=cookie('authToken',$token,60*24,'/',null,false,true);
         return response()->json([
             'message' => 'Login Success',
-            'token' => $token,
             'user' => ['name' => $user->name, 'email' => $user->email, 'role' => $user->role]
         ], 200)->cookie($cookie);
     }
