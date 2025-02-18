@@ -2,45 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Http\Requests\UserRequest;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register(UserRequest $request){
-
+    public function register(UserRequest $request)
+    {
         $userInfo = $request->validated();
         $userInfo['password'] = bcrypt($userInfo['password']);
         User::create($userInfo);
         return response()->json([
-            'message' => 'User Created Successfully',
+            'message' => 'User created successfully',
         ], 201);
 
     }
-    public function login(LoginRequest $request){
+
+    public function login(LoginRequest $request)
+    {
         $userInfo = $request->validated();
         $user = User::where('email', $userInfo['email'])->first();
         if (!$user || !Auth::attempt($userInfo)) {
             return response()->json([
-                'message' => 'Invalid Credentials',
+                'message' => 'Invalid credentials',
             ], 401);
         }
         $token = $user->createToken('authToken')->plainTextToken;
-        $cookie=cookie('authToken',$token,60*24,'/',null,false,true);
-        return response()->json([
-            'message' => 'Login Success',
-            'user' => ['name' => $user->name, 'email' => $user->email, 'role' => $user->role]
-        ], 200)->cookie($cookie);
+        $cookie = cookie('authToken', $token, 60*24, '/', null, false, true);
+        return response()
+            ->json([
+                'message' => 'User logged in successfully',
+                'user' => ['name' => $user->name, 'email' => $user->email, 'role' => $user->role]
+            ], 200)
+            ->cookie($cookie);
     }
 
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $request->user()->currentAccessToken()->delete();
         return response()->json([
-            'message' => 'Logged out'
+            'message' => 'User logged out successfully'
         ], 200);
     }
 }
