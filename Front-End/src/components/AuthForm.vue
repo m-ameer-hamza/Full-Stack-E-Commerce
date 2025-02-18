@@ -112,16 +112,6 @@ watch(
     }
   }
 );
-
-watch(
-  () => mutation.isError.value,
-  (isError, wasError) => {
-    if (isError && !wasError) {
-      console.error(mutation.error.value?.message);
-      toast.error("Registration Failed");
-    }
-  }
-);
 </script>
 
 <template>
