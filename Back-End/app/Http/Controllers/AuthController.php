@@ -17,11 +17,13 @@ class AuthController extends Controller
         $userInfo['status'] = 'approved';
         $user = User::create($userInfo);
         $token = $user->createToken('authToken')->plainTextToken;
+        //http-only cookie
+        // Life time is set as 1 day
+        $cookie=cookie('authToken',$token,60*24,'/',null,false,true);
         return response()->json([
             'message' => 'User Created Successfully',
-            'token' => $token,
             'user' => ['name' => $user->name, 'email' => $user->email, 'role' => $user->role]
-        ], 201);
+        ], 201)->cookie($cookie);
 
     }
     public function login(LoginRequest $request){

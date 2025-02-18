@@ -1,8 +1,8 @@
 <script setup>
-import { defineProps, reactive, ref } from "vue";
+import { defineProps, reactive, ref, watch } from "vue";
 import { RouterLink } from "vue-router";
 import authAPI from "../../apis/authAPI.js";
-import { useQuery } from "@tanstack/vue-query";
+import { useMutation } from "@tanstack/vue-query";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import { useToast } from "vue-toastification";
 
@@ -51,9 +51,8 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/;
 
 function validateRegisterForm() {
-  //validate regitration
-
   if (!nameRegex.test(form.name)) {
+    useQuery;
     errors.name = true;
   } else {
     errors.name = false;
@@ -71,7 +70,6 @@ function validateRegisterForm() {
 }
 
 function validateLoginForm() {
-  //validate login
   if (!emailRegex.test(form.email)) {
     errors.email = true;
   } else {
@@ -89,7 +87,7 @@ function handleSubmit(formType) {
     validateRegisterForm();
     if (!Object.values(errors).some((error) => error)) {
       registerBtnClicked.value = true;
-      console.log("Register Form is valid.", form);
+      mutation.mutate();
     }
   } else {
     validateLoginForm();
@@ -101,19 +99,29 @@ function handleSubmit(formType) {
 }
 
 //Query functions for APIs
-const { isLoading } = useQuery({
-  queryKey: ["register", form.value],
-  queryFn: () => register(form.value),
-  enabled: registerBtnClicked,
+const mutation = useMutation({
+  mutationFn: () => register(form),
   retry: false,
-  onSuccess: () => {
-    toast.success("Registration Successful");
-  },
-  onError: (error) => {
-    console.error(error.message);
-    toast.error("Registration Failed");
-  },
 });
+
+watch(
+  () => mutation.isSuccess.value,
+  (isSuccess, wasSuccess) => {
+    if (isSuccess && !wasSuccess) {
+      toast.success("Registration Successful");
+    }
+  }
+);
+
+watch(
+  () => mutation.isError.value,
+  (isError, wasError) => {
+    if (isError && !wasError) {
+      console.error(mutation.error.value?.message);
+      toast.error("Registration Failed");
+    }
+  }
+);
 </script>
 
 <template>
@@ -190,7 +198,7 @@ const { isLoading } = useQuery({
           class="w-full flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg transition duration-300"
         >
           <!-- When loading, show spinner and "Sing In ...." -->
-          <template v-if="isLoading">
+          <template v-if="mutation.isLoading">
             <span>Register In .....</span>
             <!-- The spinner component with some right margin -->
             <PulseLoader :loading="isLoading" color="#fff" class="mr-2" />
