@@ -13,10 +13,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  showRegisterAs: {
-    type: Boolean,
-    default: true,
-  },
+  // showRegisterAs: {
+  //   type: Boolean,
+  //   default: true,
+  // },
   formTitle: {
     type: String,
     default: "Register",
@@ -36,17 +36,17 @@ const form = reactive({
   name: "",
   email: "",
   password: "",
-  role: "",
+  // role: "",
 });
 
 const errors = reactive({
   name: false,
   email: false,
   password: false,
-  role: false,
+  // role: false,
 });
 
-const nameRegex = /^[A-Za-z]{5,}$/;
+const nameRegex = /^[A-Za-z ]{5,}$/;
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -189,21 +189,7 @@ watch(
             *Min 8 characters and mix with special character
           </p>
         </div>
-        <!-- Register As Dropdown -->
-        <div class="relative" v-if="showRegisterAs">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-4">
-            <i class="pi pi-users text-green-500"></i>
-          </span>
-          <select
-            v-model="form.role"
-            class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          >
-            <option value="" disabled selected>Register as</option>
-            <option value="admin">Admin</option>
-            <option value="user">User</option>
-          </select>
-          <p v-if="errors.role" class="text-red-700">* select regsiter as</p>
-        </div>
+
         <!-- Register Button -->
 
         <button

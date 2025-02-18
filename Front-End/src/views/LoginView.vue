@@ -5,10 +5,5 @@ const showName = ref("");
 const showRegisterAs = ref("");
 </script>
 <template>
-  <AuthForm
-    :showName="false"
-    :showRegisterAs="false"
-    formTitle="Login"
-    btnTitle="login"
-  />
+  <AuthForm :showName="false" formTitle="Login" btnTitle="login" />
 </template>

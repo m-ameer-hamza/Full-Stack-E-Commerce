@@ -12,10 +12,9 @@ class AuthController extends Controller
 {
     public function register(UserRequest $request){
 
-       $userInfo = $request->validated();
+        $userInfo = $request->validated();
         $userInfo['password'] = bcrypt($userInfo['password']);
-        $userInfo['status'] = 'approved';
-        $user = User::create($userInfo);
+        User::create($userInfo);
         return response()->json([
             'message' => 'User Created Successfully',
         ], 201);
