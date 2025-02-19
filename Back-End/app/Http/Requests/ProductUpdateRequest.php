@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductRequest extends FormRequest
+class ProductUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,13 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=> ['required', 'min:3', 'max:255'],
-            'description'=> ['required', 'min:10', 'max:255'],
-            'price' => ['required', 'numeric', 'between:0,999999.99'],
-            'category'=> ['required', 'in:electronics,grocery,cloth,appliances'],
+        'title' => ['sometimes','string','max:255', 'min:3'],
+        'description' => ['sometimes','string', 'max:255', 'min:10'],
+        'price' => ['sometimes','numeric', 'between:0,999999.99'],
+        'category' => ['sometimes','in:electronics,grocery,cloth,appliances'],
         ];
     }
-    public function messages()
-    {
+    public function messages(){
         return [
             'title.min' => 'The title must be at least 3 characters long.',
             'description.min' => 'The description must be at least 10 characters long.',
@@ -38,4 +37,5 @@ class ProductRequest extends FormRequest
             'category.in' => 'The category must be one of the following: electronics, grocery, cloth, appliances.',
         ];
     }
+    
 }

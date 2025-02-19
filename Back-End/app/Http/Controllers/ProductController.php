@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
+use GuzzleHttp\Psr7\Request;
 
 class ProductController extends Controller
 {
@@ -14,7 +16,7 @@ class ProductController extends Controller
         ], 200);
     }
     public function create(){
-      // This method is not needed
+      //
     }
     public function store(ProductRequest $request){
         $productInfo = $request->validated();
@@ -35,17 +37,17 @@ class ProductController extends Controller
         ], 200);
     }
     public function edit(){
-      // This method is not needed
+      //
     }
-    public function update(ProductRequest $request, $id){
-        $productInfo = $request->validated();
+    public function update(ProductUpdateRequest $request, $id){
+        $updatedInfo = $request->validated();
         $product = Product::find($id);
         if(!$product){
             return response()->json([
                 'message' => 'Product not found'
             ], 404);
         }
-        $product->update($productInfo);
+        $product->update($updatedInfo);
         return response()->json([
             'message' => 'Product updated successfully',
             'product' => $product
