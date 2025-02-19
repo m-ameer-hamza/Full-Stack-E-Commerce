@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,4 +12,4 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout')->middleware('auth:sanctum');
 });
 Route::resource('products', ProductController::class)->except(['create','edit']);
-Route::resource('orderItems', OrderItemController::class);
+Route::resource('orders', OrderController::class);

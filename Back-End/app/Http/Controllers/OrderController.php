@@ -8,24 +8,42 @@ use App\Models\Product;
 use App\Http\Requests\OrderItemRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\OrderResourse;
+use Laravel\Sanctum\PersonalAccessToken;
 
-class OrderItemController extends Controller
+class OrderController extends Controller
 {
     public function index()
     {
-        //
+        //returns the orders of a specific user only using the id from token
+        $orders = Order::all();
+        return response()->json([
+            'orders' => OrderResourse::collection($orders),
+        ]);
     }
 
     public function create()
     {
         //
     }
-
+//     public function getUserId(Request $request) {
+//     if ($request->hasHeader('Authorization')) {
+//         $token = $request->bearerToken();
+//         if ($token) {
+//             $accessToken = PersonalAccessToken::findToken($token);
+//             if ($accessToken) {
+//                 return $accessToken->tokenable_id;
+//             }
+//         }
+//     }
+//     return null;
+// }
     public function store(OrderItemRequest $request)
     {
-        $user = Auth::user();
+        // $userId = $this->getUserId($request);
+        $userId=null;
         $order = Order::create([
-            'user_id' => $user ? $user->id : null,
+            'user_id' => $userId,
         ]);
         // for order table
         $totalAmount = 0;
@@ -50,19 +68,22 @@ class OrderItemController extends Controller
             'total' => $totalAmount,
         ]);
 
-        return response()->json(['message' => 'order placed successfully'], 201);
+        return response()->json([
+            'message' => 'order placed successfully',
+            'order' => new OrderResourse($order),
+        ], 201);
     }
 
     public function show($id)
     {
-        // returns the UserName and Product details against the orderItems id
-        $orderItem = OrderItem::find($id);
-        if (! $orderItem) {
-            return response()->json(['message' => 'OrderItem not found'], 404);
+        //find the order by id. order id is passed as a parameter
+        $order = Order::find($id);
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
         }
-        $orderItem->load('order.user', 'product');
-
-        return response()->json($orderItem, 200);
+        return response()->json([
+            'order' => new OrderResourse($order),
+        ]);
     }
 
     public function edit()
