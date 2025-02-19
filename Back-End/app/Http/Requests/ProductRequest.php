@@ -24,7 +24,7 @@ class ProductRequest extends FormRequest
         return [
             'title'=> ['required', 'min:3'],
             'description'=> ['required', 'min:10'],
-            'price'=> ['required', 'decimal'],
+            'price' => ['required', 'numeric', 'between:0,999999.99'],
             'category'=> ['required', 'in:electronics,grocery,cloth,appliances'],
         ];
     }
@@ -33,7 +33,8 @@ class ProductRequest extends FormRequest
         return [
             'title.min' => 'The title must be at least 3 characters long.',
             'description.min' => 'The description must be at least 10 characters long.',
-            'price.decimal' => 'The price must be a valid decimal.',
+            'price.numeric' => 'The price must be a valid number.',
+            'price.between' => 'The price must be a valid number with up to two decimal places.',
             'category.in' => 'The category must be one of the following: electronics, grocery, cloth, appliances.',
         ];
     }

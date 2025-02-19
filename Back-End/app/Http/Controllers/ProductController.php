@@ -13,12 +13,14 @@ class ProductController extends Controller
             'products' => $products
         ], 200);
     }
-    public function create(ProductRequest $request){
+    public function create(){
+      // This method is not needed
+    }
+    public function store(ProductRequest $request){
         $productInfo = $request->validated();
         $product = Product::create($productInfo);
         return response()->json([
             'message' => 'Product created successfully',
-            'product' => $product
         ], 201);
     }
     public function show($id){
@@ -31,6 +33,9 @@ class ProductController extends Controller
         return response()->json([
             'product' => $product
         ], 200);
+    }
+    public function edit(){
+      // This method is not needed
     }
     public function update(ProductRequest $request, $id){
         $productInfo = $request->validated();
