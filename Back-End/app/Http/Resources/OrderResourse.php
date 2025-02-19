@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\OrderItemResourse;
 
 class OrderResourse extends JsonResource
 {
@@ -15,11 +16,10 @@ class OrderResourse extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            // 'user_id' => $this->order->user_id,
-            'order_items' => $this->orderItems,
-            'total' => $this->total,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            // 'user_id' => new UserResource($this->order->user), //check this association
+            'order_items' => OrderItemResourse::collection($this->orderItems),
+            'total'       => $this->total,
+            'created_at'  => $this->created_at,
         ];
     }
 }

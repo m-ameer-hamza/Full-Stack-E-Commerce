@@ -12,4 +12,4 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout')->middleware('auth:sanctum');
 });
 Route::resource('products', ProductController::class)->except(['create','edit']);
-Route::resource('orders', OrderController::class);
+Route::resource('orders', OrderController::class)->middleware('auth:sanctum')->except(['create','edit']);

@@ -36,7 +36,8 @@ class AuthController extends Controller
         
         return response()->json([
                 'message' => 'User logged in successfully',
-                'user' => new UserResource($user)
+                'user' => new UserResource($user),
+                'token' => $token          //confirm this cookie-based or send token in response
             ], 200)->cookie($cookie);
     }
 

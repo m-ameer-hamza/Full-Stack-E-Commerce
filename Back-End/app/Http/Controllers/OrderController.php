@@ -16,32 +16,19 @@ class OrderController extends Controller
     public function index()
     {
         //returns the orders of a specific user only using the id from token
-        $orders = Order::all();
+        $userId = Auth::id();
+        $orders = Order::where('user_id', $userId)->get();
+        if($orders->isEmpty()) {
+            return response()->json(['message' => 'No orders found'], 404);
+        }
         return response()->json([
             'orders' => OrderResourse::collection($orders),
         ]);
     }
 
-    public function create()
-    {
-        //
-    }
-//     public function getUserId(Request $request) {
-//     if ($request->hasHeader('Authorization')) {
-//         $token = $request->bearerToken();
-//         if ($token) {
-//             $accessToken = PersonalAccessToken::findToken($token);
-//             if ($accessToken) {
-//                 return $accessToken->tokenable_id;
-//             }
-//         }
-//     }
-//     return null;
-// }
     public function store(OrderItemRequest $request)
     {
-        // $userId = $this->getUserId($request);
-        $userId=null;
+        $userId = Auth::id();
         $order = Order::create([
             'user_id' => $userId,
         ]);
@@ -76,7 +63,8 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        //find the order by id. order id is passed as a parameter
+        //find the specific order of the user using the order id. 
+        //order id is passed as a parameter
         $order = Order::find($id);
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
@@ -84,11 +72,6 @@ class OrderController extends Controller
         return response()->json([
             'order' => new OrderResourse($order),
         ]);
-    }
-
-    public function edit()
-    {
-        //
     }
 
     public function update(Request $request, $id)
