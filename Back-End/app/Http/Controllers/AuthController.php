@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Http\Requests\UserRequest;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,32 +15,30 @@ class AuthController extends Controller
     {
         $userInfo = $request->validated();
         $userInfo['password'] = bcrypt($userInfo['password']);
-        User::create($userInfo);
+        $user = User::create($userInfo);
         return response()->json([
             'message' => 'User created successfully',
         ], 201);
-
     }
 
     public function login(LoginRequest $request)
     {
         $userInfo = $request->validated();
         $user = User::where('email', $userInfo['email'])->first();
-        if (!$user || !Auth::attempt($userInfo)) {
+        if (! $user || ! Auth::attempt($userInfo)) {
+
             return response()->json([
-                'message' => 'Invalid credentials',
+                'message' => 'Invalid credentials'
             ], 401);
         }
         $token = $user->createToken('authToken')->plainTextToken;
-        $cookie = cookie('authToken', $token, 60*24, '/', null, false, true);
-        return response()
-            ->json([
+        $cookie = cookie('authToken', $token, 60 * 24, '/', null, false, true);
+        
+        return response()->json([
                 'message' => 'User logged in successfully',
-                'user' => ['name' => $user->name, 'email' => $user->email, 'role' => $user->role]
-            ], 200)
-            ->cookie($cookie);
+                'user' => new UserResource($user)
+            ], 200)->cookie($cookie);
     }
-
 
     public function logout(Request $request)
     {

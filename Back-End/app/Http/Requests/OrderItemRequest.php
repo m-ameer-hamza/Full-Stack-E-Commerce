@@ -19,19 +19,20 @@ class OrderItemRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
-        // return [
-        //     'order_id' => 'required|exists:orders,id',
-        //     'product_id' => 'required|exists:products,id',
-        //     'quantity' => 'required|integer|min:1',
-        //     'price' => 'required|numeric|min:0.01',
-        // ];
+        return [
+            'items' => ['required', 'array', 'min:1'],
+            'items.*.quantity' => ['required', 'integer', 'min:1'],
+        ];
 
-         return [
-       
-            'quantity' => ['required','integer','min:1'],
-            'amount' => ['required','decimal','min:0.01'],
+    }
+
+    public function messages(): array
+    {
+        return [
+            'quantity.integer' => 'The quantity must be an integer.',
+            'quantity.min' => 'The quantity must be at least 1.',
         ];
     }
 }

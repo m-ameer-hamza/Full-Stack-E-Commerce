@@ -9,10 +9,16 @@ class Order extends Model
     protected $fillable = [
         'total',
         'user_id',
+        'status',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function orderItems()// check this
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

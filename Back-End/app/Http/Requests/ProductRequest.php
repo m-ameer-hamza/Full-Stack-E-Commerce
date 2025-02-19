@@ -22,12 +22,13 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=> ['required', 'min:3', 'max:255'],
-            'description'=> ['required', 'min:10', 'max:255'],
+            'title' => ['required', 'min:3', 'max:20'],
+            'description' => ['required', 'min:10', 'max:255'],
             'price' => ['required', 'numeric', 'between:0,999999.99'],
-            'category'=> ['required', 'in:electronics,grocery,cloth,appliances'],
+            'category' => ['required', 'in:electronics,grocery,cloth,appliances'],
         ];
     }
+
     public function messages()
     {
         return [

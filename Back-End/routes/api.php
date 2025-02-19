@@ -1,8 +1,9 @@
 <?php
-use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\OrderController;
+use Illuminate\Support\Facades\Route;
 
 // Auth routes
 Route::controller(AuthController::class)->group(function () {
@@ -10,5 +11,5 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout')->middleware('auth:sanctum');
 });
-Route::resource('products', ProductController::class);
-Route::resource('orders', OrderController::class);
+Route::resource('products', ProductController::class)->except(['create','edit']);
+Route::resource('orderItems', OrderItemController::class);

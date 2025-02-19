@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -21,7 +20,7 @@ class UserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-       public function rules(): array
+    public function rules(): array
     {
         return [
             'name' => ['required', 'min:3'],
@@ -29,7 +28,8 @@ class UserRequest extends FormRequest
             'password' => ['required', 'min:6', 'max:20'],
         ];
     }
-     public function messages()
+
+    public function messages()
     {
         return [
             'name.min' => 'The name must be at least 3 characters long.',
