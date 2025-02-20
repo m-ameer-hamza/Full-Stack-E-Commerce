@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->decimal('price', 10, 2);
-            $table->enum('category', ['electronics', 'grocery', 'cloth', 'appliances']);
+            $table->enum('category', ['electronics', 'grocery', 'clothing', 'appliances']);
             $table->timestamps();
         });
     }

@@ -30,7 +30,23 @@ class ProductController extends Controller
         ], 201);
     }
 
-    public function show($id) // dependency injection
+    public function getByCategory($category)
+    {
+        if(! in_array($category, ['electronics', 'appliances', 'clothing','grocery'])) {
+            return response()->json([
+                'message' => 'Invalid category',
+            ], 400);
+        }
+
+        $products = Product::where('category', $category)->get();
+
+        return response()->json([
+            'message' => "$category products fetched successfully",
+            'products' => ProductResourse::collection($products),
+        ], 200);
+    }
+
+    public function show($id)
     {
         $product = Product::find($id);
         if (! $product) {

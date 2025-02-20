@@ -108,21 +108,21 @@ class ProductSeeder extends Seeder
                 'title' => 'Jeans Slim Fit',
                 'description' => 'Comfortable and stylish slim fit jeans for men.',
                 'price' => 49.99,
-                'category' => 'cloth',
+                'category' => 'clothing',
 
             ],
             [
                 'title' => 'Casual T-Shirt',
                 'description' => 'Soft cotton T-shirt available in multiple colors.',
                 'price' => 19.99,
-                'category' => 'cloth',
+                'category' => 'clothing',
 
             ],
             [
                 'title' => 'Running Shoes',
                 'description' => 'Breathable and lightweight running shoes with great grip.',
                 'price' => 59.99,
-                'category' => 'cloth',
+                'category' => 'clothing',
 
             ],
             [
