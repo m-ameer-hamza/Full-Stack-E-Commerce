@@ -19,17 +19,6 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function store(ProductRequest $request)
-    {
-        $data = $request->validated();
-        $product = Product::create($data);
-
-        return response()->json([
-            'message' => 'Product created successfully',
-            'product' => new ProductResourse($product),
-        ], 201);
-    }
-
     public function getByCategory($category)
     {
         if(! in_array($category, ['electronics', 'appliances', 'clothing','grocery'])) {
@@ -45,6 +34,19 @@ class ProductController extends Controller
             'products' => ProductResourse::collection($products),
         ], 200);
     }
+    
+    public function store(ProductRequest $request)
+    {
+        $data = $request->validated();
+        $product = Product::create($data);
+
+        return response()->json([
+            'message' => 'Product created successfully',
+            'product' => new ProductResourse($product),
+        ], 201);
+    }
+
+    
 
     public function show($id)
     {
