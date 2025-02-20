@@ -15,7 +15,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        //returns the orders of a specific user only using the id from token
+        //returns all orders of a specific user only using the id from token
         $userId = Auth::id();
         $orders = Order::where('user_id', $userId)->get();
         if($orders->isEmpty()) {
@@ -74,13 +74,59 @@ class OrderController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(OrderItemRequest $request, $id)
     {
-        //
+        if(!$id){
+            return response()->json(['message' => 'provide order id'], 400);
+        }
+        $order = Order::find($id);
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+        //delete previous records
+        $order->orderItems()->delete();
+        $totalAmount = 0;
+        foreach ($request->items as $item) {
+            $product = Product::find($item['product_id']);
+            if (! $product) {
+                return response()->json(['message' => 'Product not found'], 404);
+            }
+
+            $amount = $product->price * $item['quantity'];
+
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+                'quantity' => $item['quantity'],
+                'amount' => $amount,
+            ]);
+            $totalAmount += $amount;
+        }
+        // update the order table
+        $order->update([
+            'total' => $totalAmount,
+        ]);
+
+         return response()->json([
+            'message' => 'order updated successfully',
+            'order' => new OrderResourse($order),
+        ], 200);
+
+
     }
 
     public function destroy($id)
     {
-        //
+        if(!$id){
+            return response()->json(['message' => 'provide order id'], 400);
+        }
+        $order = Order::find($id);
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+        $order->delete();
+        return response()->json([
+            'message' => 'Order deleted successfully',
+        ]);
     }
 }
