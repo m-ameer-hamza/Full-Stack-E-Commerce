@@ -21,7 +21,7 @@ class ProductController extends Controller
 
     public function getByCategory($category)
     {
-        if(! in_array($category, ['electronics', 'appliances', 'clothing','grocery'])) {
+        if (! in_array($category, ['electronics', 'appliances', 'clothing', 'grocery'])) {
             return response()->json([
                 'message' => 'Invalid category',
             ], 400);
@@ -34,7 +34,7 @@ class ProductController extends Controller
             'products' => ProductResourse::collection($products),
         ], 200);
     }
-    
+
     public function store(ProductRequest $request)
     {
         $data = $request->validated();
@@ -45,8 +45,6 @@ class ProductController extends Controller
             'product' => new ProductResourse($product),
         ], 201);
     }
-
-    
 
     public function show($id)
     {
