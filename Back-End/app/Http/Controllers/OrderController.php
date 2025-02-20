@@ -25,17 +25,15 @@ class OrderController extends Controller
         ]);
     }
 
-    public function store(OrderItemRequest $request)
+    public function store(OrderItemRequest $request) // change name
     {
         $userId = Auth::id();
-        $order = Order::create([
-            'user_id' => $userId,
-        ]);
-        // for order table
+        $order = Order::create(['user_id' => $userId]);
+
         $totalAmount = 0;
-        foreach ($request->items as $item) {
+        foreach ($request->items as $item) {  //create a service for this named: OrderItemsCreator
             $product = Product::find($item['product_id']);
-            if (! $product) {
+            if (!$product) {
                 return response()->json(['message' => 'Product not found'], 404);
             }
 
@@ -49,7 +47,7 @@ class OrderController extends Controller
             ]);
             $totalAmount += $amount;
         }
-        // update the order table
+
         $order->update([
             'total' => $totalAmount,
         ]);
@@ -62,8 +60,8 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::find($id);
-        if (! $order) {
+        $order = Order::find($id); // lazy load -> :with
+        if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
 
@@ -74,14 +72,11 @@ class OrderController extends Controller
 
     public function update(OrderItemRequest $request, $id)
     {
-        if (! $id) {
-            return response()->json(['message' => 'provide order id'], 400);
-        }
         $order = Order::find($id);
-        if (! $order) {
+        if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
-        // delete previous records
+
         $order->orderItems()->delete();
         $totalAmount = 0;
         foreach ($request->items as $item) {
@@ -100,10 +95,8 @@ class OrderController extends Controller
             ]);
             $totalAmount += $amount;
         }
-        // update the order table
-        $order->update([
-            'total' => $totalAmount,
-        ]);
+
+        $order->update(['total' => $totalAmount]);
 
         return response()->json([
             'message' => 'order updated successfully',
@@ -114,11 +107,8 @@ class OrderController extends Controller
 
     public function destroy($id)
     {
-        if (! $id) {
-            return response()->json(['message' => 'provide order id'], 400);
-        }
         $order = Order::find($id);
-        if (! $order) {
+        if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
         $order->delete();

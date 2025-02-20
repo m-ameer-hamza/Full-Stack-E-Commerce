@@ -21,13 +21,13 @@ class ProductController extends Controller
 
     public function getByCategory($category)
     {
-        if (! in_array($category, ['electronics', 'appliances', 'clothing', 'grocery'])) {
+        if (!in_array($category, ['electronics', 'appliances', 'clothing', 'grocery'])) {
             return response()->json([
                 'message' => 'Invalid category',
             ], 400);
         }
 
-        $products = Product::where('category', $category)->get();
+        $products = Product::where('category', $category)->get(); // forCategory
 
         return response()->json([
             'message' => "$category products fetched successfully",
@@ -49,7 +49,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-        if (! $product) {
+        if (!$product) {
             return response()->json([
                 'message' => 'Product not found',
             ], 404);
@@ -64,7 +64,7 @@ class ProductController extends Controller
     {
         $updatedInfo = $request->validated();
         $product = Product::find($id);
-        if (! $product) {
+        if (!$product) {
             return response()->json([
                 'message' => 'Product not found',
             ], 404);
@@ -81,7 +81,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
-        if (! $product) {
+        if (!$product) {
             return response()->json([
                 'message' => 'Product not found',
             ], 404);

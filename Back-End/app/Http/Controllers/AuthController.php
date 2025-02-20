@@ -13,9 +13,9 @@ class AuthController extends Controller
 {
     public function register(UserRequest $request)
     {
-        $userInfo = $request->validated();
-        $userInfo['password'] = bcrypt($userInfo['password']);
-        $user = User::create($userInfo);
+        $info = $request->validated();
+        $info['password'] = bcrypt($info['password']);
+        User::create($info);
 
         return response()->json([
             'message' => 'User created successfully',
@@ -24,9 +24,9 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $userInfo = $request->validated();
-        $user = User::where('email', $userInfo['email'])->first();
-        if (! $user || ! Auth::attempt($userInfo)) {
+        $info = $request->validated();
+        $user = User::where('email', $info['email'])->first();
+        if (! $user || ! Auth::attempt($info)) {
 
             return response()->json([
                 'message' => 'Invalid credentials',
