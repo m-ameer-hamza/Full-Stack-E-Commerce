@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Http\Resources\ProductResourse;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Resources\ProductResourse;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -14,7 +14,7 @@ class ProductController extends Controller
         $products = Product::all();
 
         return response()->json([
-            'message'  => 'Products fetched successfully',
+            'message' => 'Products fetched successfully',
             'products' => ProductResourse::collection($products),
         ], 200);
     }
@@ -33,7 +33,7 @@ class ProductController extends Controller
     public function show($id) // dependency injection
     {
         $product = Product::find($id);
-        if (!$product) {
+        if (! $product) {
             return response()->json([
                 'message' => 'Product not found',
             ], 404);
@@ -65,7 +65,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
-        if (!$product) {
+        if (! $product) {
             return response()->json([
                 'message' => 'Product not found',
             ], 404);

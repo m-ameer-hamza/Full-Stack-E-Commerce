@@ -16,6 +16,7 @@ class AuthController extends Controller
         $userInfo = $request->validated();
         $userInfo['password'] = bcrypt($userInfo['password']);
         $user = User::create($userInfo);
+
         return response()->json([
             'message' => 'User created successfully',
         ], 201);
@@ -28,24 +29,25 @@ class AuthController extends Controller
         if (! $user || ! Auth::attempt($userInfo)) {
 
             return response()->json([
-                'message' => 'Invalid credentials'
+                'message' => 'Invalid credentials',
             ], 401);
         }
         $token = $user->createToken('authToken')->plainTextToken;
         $cookie = cookie('authToken', $token, 60 * 24, '/', null, false, true);
-        
+
         return response()->json([
-                'message' => 'User logged in successfully',
-                'user' => new UserResource($user),
-                'token' => $token          //confirm this cookie-based or send token in response
-            ], 200)->cookie($cookie);
+            'message' => 'User logged in successfully',
+            'user' => new UserResource($user),
+            'token' => $token,          // confirm this cookie-based or send token in response
+        ], 200)->cookie($cookie);
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
+
         return response()->json([
-            'message' => 'User logged out successfully'
+            'message' => 'User logged out successfully',
         ], 200);
     }
 }

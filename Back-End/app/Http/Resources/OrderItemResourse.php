@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\ProductResourse;
 
 class OrderItemResourse extends JsonResource
 {
@@ -16,9 +15,9 @@ class OrderItemResourse extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'product'    => new ProductResourse($this->product),
-            'quantity'   => $this->quantity,
-            'amount'     => $this->amount,
+            'product' => new ProductResourse($this->product),
+            'quantity' => $this->quantity,
+            'amount' => $this->amount,
             'created_at' => $this->created_at,
         ];
     }
