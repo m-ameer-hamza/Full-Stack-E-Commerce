@@ -16,7 +16,7 @@ class OrderResourse extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            // 'user_id' => new UserResource($this->order->user), //check this association
+            'user' => new UserResource($this->user), //check this association
             'order_items' => OrderItemResourse::collection($this->orderItems),
             'total'       => $this->total,
             'created_at'  => $this->created_at,
