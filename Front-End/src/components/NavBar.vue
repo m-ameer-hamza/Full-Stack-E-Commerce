@@ -1,106 +1,95 @@
 <script setup>
-import { RouterLink, useRoute } from "vue-router";
-// import logo from "@/assets/img/logo.png";
+import { computed } from "vue";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 
-const isActiveLink = (routePath) => {
-  const route = useRoute();
-  if (route == undefined) {
-    return;
+const router = useRouter();
+const route = useRoute();
+
+const btnText = computed(() =>
+  route.path === "/login" ? "Register" : "Login"
+);
+const icon = computed(() =>
+  route.path === "/login" ? "pi pi-user-plus" : "pi pi-user"
+);
+
+const goToLogin = () => {
+  if (route.path !== "/login") {
+    router.push("login");
+  } else {
+    // Optionally, navigate to another route (e.g., register)
+    router.push("register");
   }
-  return route?.path === routePath;
 };
 </script>
 
 <template>
-  <nav class="bg-green-700 border-b border-green-500">
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-      <div class="flex h-20 items-center justify-between">
-        <div
-          class="flex flex-1 items-center justify-center md:items-stretch md:justify-start"
-        >
-          <!-- Logo -->
-          <RouterLink class="flex flex-shrink-0 items-center mr-4" to="/">
-            <!-- <img class="h-10 w-auto" :src="logo" alt="Vue Jobs" /> -->
-            <span class="hidden md:block text-white text-2xl font-bold ml-2"
-              >EcomNest</span
-            >
-          </RouterLink>
-          <div class="md:ml-auto">
-            <!-- Displayed only when user is logged in -->
-            <!-- <div class="flex space-x-2">
-              <RouterLink
-                to="/"
-                :class="[
-                  isActiveLink('/')
-                    ? 'bg-green-900'
-                    : 'hover:bg-gray-900 hover:text-white',
-                  'text-white',
-                  'px-3',
-                  'py-2',
-                  'rounded-md',
-                ]"
-                >Home</RouterLink
-              >
-              <RouterLink
-                to="/jobs"
-                :class="[
-                  isActiveLink('/jobs')
-                    ? 'bg-green-900'
-                    : 'hover:bg-gray-900 hover:text-white',
-                  'text-white',
-                  'px-3',
-                  'py-2',
-                  'rounded-md',
-                ]"
-                >Jobs</RouterLink
-              >
-              <RouterLink
-                to="/jobs/add"
-                :class="[
-                  isActiveLink('/jobs/add')
-                    ? 'bg-green-900'
-                    : 'hover:bg-gray-900 hover:text-white',
-                  'text-white',
-                  'px-3',
-                  'py-2',
-                  'rounded-md',
-                ]"
-                >Add Job</RouterLink
-              >
-            </div> -->
-            <!-- Displayed only when user is not logged in -->
-            <div class="flex space-x-10">
-              <RouterLink
-                to="/login"
-                :class="[
-                  isActiveLink('/login')
-                    ? 'bg-green-900'
-                    : 'hover:bg-gray-900 hover:text-white',
-                  'text-white',
-                  'px-3',
-                  'py-2',
-                  'rounded-md',
-                ]"
-                >Login</RouterLink
-              >
+  <header class="sticky top-0 z-50 bg-gray-50 shadow-md">
+    <div
+      class="container mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between"
+    >
+      <!-- Logo -->
+      <div class="mb-4 md:mb-0">
+        <div class="text-3xl md:text-4xl font-bold text-black">EcomNest</div>
+      </div>
 
-              <RouterLink
-                to="/"
-                :class="[
-                  isActiveLink('/')
-                    ? 'bg-green-900'
-                    : 'hover:bg-gray-900 hover:text-white',
-                  'text-white',
-                  'px-3',
-                  'py-2',
-                  'rounded-md',
-                ]"
-                >Register Now</RouterLink
-              >
-            </div>
-          </div>
+      <!-- Navigation -->
+      <nav class="mb-4 md:mb-0">
+        <ul class="flex space-x-8">
+          <li>
+            <RouterLink
+              to="/"
+              class="text-lg text-gray-800 hover:text-orange-500 transition-colors"
+            >
+              Home
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink
+              to="/shop"
+              class="text-lg text-gray-800 hover:text-orange-500 transition-colors"
+            >
+              Shop
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink
+              to="/about"
+              class="text-lg text-gray-800 hover:text-orange-500 transition-colors"
+            >
+              About
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink
+              to="/contact"
+              class="text-lg text-gray-800 hover:text-orange-500 transition-colors"
+            >
+              Contact
+            </RouterLink>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Icons Section -->
+      <div class="flex items-center space-x-12">
+        <!-- Cart Icon with Badge -->
+        <div class="relative group-hover:cursor-pointer">
+          <i class="pi pi-shopping-cart text-2xl text-gray-800"></i>
+          <span
+            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full"
+          >
+            3
+          </span>
         </div>
+        <!-- Login Button -->
+        <button
+          @click="goToLogin"
+          class="flex items-center gap-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+        >
+          <i :class="`${icon} text-white text-lg`"></i>
+          <span>{{ btnText }}</span>
+        </button>
       </div>
     </div>
-  </nav>
+  </header>
 </template>

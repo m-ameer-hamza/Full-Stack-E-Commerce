@@ -9,11 +9,11 @@ const router = createRouter({
       name: "home",
       component: RegisterView,
     },
-    // {
-    //   path: "/register",
-    //   name: "home",
-    //   component: RegisterView,
-    // },
+    {
+      path: "/register",
+      name: "register",
+      component: RegisterView,
+    },
     {
       path: "/login",
       name: "login",
