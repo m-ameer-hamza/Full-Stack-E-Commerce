@@ -1,11 +1,11 @@
 <script setup>
-import { defineProps, reactive, ref, watch } from "vue";
+import { computed, reactive, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
-import authAPI from "../../apis/authAPI.js";
 import { useMutation } from "@tanstack/vue-query";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import { useToast } from "vue-toastification";
-import { userSatore } from "../stores/userStore.js";
+import { useUserStore } from "../stores/userStore.js";
+import authAPI from "../../apis/authAPI.js";
 
 const props = defineProps({
   showName: {
@@ -21,115 +21,104 @@ const props = defineProps({
     default: "Register",
   },
 });
-const toast = useToast();
-const registerBtnClicked = ref(false);
-const loginBtnClicked = ref(false);
-const { register, login } = authAPI();
-const router = useRouter();
 
+const router = useRouter();
+const toast = useToast();
+const { register, login } = authAPI();
+const userStore = useUserStore();
+
+const formType = computed(() => (props.showName ? "register" : "login"));
+const showPassword = ref(false);
+
+// Form state
 const form = reactive({
   name: "",
   email: "",
   password: "",
-  // role: "",
 });
 
+// Validation state
 const errors = reactive({
   name: false,
   email: false,
   password: false,
 });
 
-const nameRegex = /^[A-Za-z ]{5,}$/;
+// Regex patterns
+const VALIDATION_REGEX = {
+  name: /^[A-Za-z ]{5,}$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/,
+};
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Form validation
+function validateForm() {
+  let isValid = true;
 
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/;
+  if (formType.value === "register") {
+    errors.name = !VALIDATION_REGEX.name.test(form.name);
+    isValid &&= !errors.name;
+  }
 
-function validateRegisterForm() {
-  if (!nameRegex.test(form.name)) {
-    useQuery;
-    errors.name = true;
-  } else {
-    errors.name = false;
-  }
-  if (!emailRegex.test(form.email)) {
-    errors.email = true;
-  } else {
-    errors.email = false;
-  }
-  if (!passwordRegex.test(form.password)) {
-    errors.password = true;
-  } else {
-    errors.password = false;
-  }
+  errors.email = !VALIDATION_REGEX.email.test(form.email);
+  errors.password = !VALIDATION_REGEX.password.test(form.password);
+
+  isValid &&= !errors.email && !errors.password;
+  return isValid;
 }
 
-function validateLoginForm() {
-  if (!emailRegex.test(form.email)) {
-    errors.email = true;
-  } else {
-    errors.email = false;
-  }
-  if (!passwordRegex.test(form.password)) {
-    errors.password = true;
-  } else {
-    errors.password = false;
-  }
+// Form submission
+function handleSubmit() {
+  if (!validateForm()) return;
+
+  formType.value === "register" ? regMutation.mutate() : loginMutation.mutate();
 }
 
-function handleSubmit(formType) {
-  if (formType === "register") {
-    validateRegisterForm();
-    if (!Object.values(errors).some((error) => error)) {
-      registerBtnClicked.value = true;
-      mutation.mutate();
-    }
-  } else {
-    validateLoginForm();
-    if (!Object.values(errors).some((error) => error)) {
-      console.log("Login Form is valid.", form);
-      loginBtnClicked.value = true;
-      loginMutation.mutate();
-    }
-  }
-}
+// Password visibility toggle
+const togglePassword = () => {
+  showPassword.value = !showPassword.value;
+};
 
-//Mutataion Query for Register
-const mutation = useMutation({
-  mutationFn: () => register(form),
+// Mutation configurations
+const mutationConfig = {
   retry: false,
+  onError: (error) => {
+    toast.error(
+      error.message || `Something went wrong during ${formType.value}`
+    );
+  },
+};
+
+// Register mutation
+const regMutation = useMutation({
+  mutationFn: () => register(form),
+  ...mutationConfig,
+  onSuccess: () => {
+    toast.success("Registration Successful");
+    router.push("/login");
+  },
 });
-watch(
-  () => mutation.isSuccess.value,
-  (isSuccess, wasSuccess) => {
-    if (isSuccess && !wasSuccess) {
-      toast.success("Registration Successful");
-      //redirect to login page
-      router.push("/login");
-    }
-  }
-);
+
+// Login mutation
 const loginMutation = useMutation({
   mutationFn: () => login(form),
-  retry: false,
+  ...mutationConfig,
+  onSuccess: (data) => {
+    toast.success("Login Successful");
+    userStore.setUser({
+      email: data.user.email,
+      name: data.user.name,
+      isAuthenticated: true,
+    });
+    router.push("/");
+  },
 });
-watch(
-  () => loginMutation.isSuccess.value,
-  (isSuccess, wasSuccess) => {
-    if (isSuccess && !wasSuccess) {
-      toast.success("Login Successful");
-      //storing userData in the pinia
-      const userData = {
-        email: loginMutation.data.value.user.email,
-        name: loginMutation.data.value.user.name,
-        isAuthenticated: true,
-      };
-      const userStore = userSatore();
-      userStore.setUser(userData);
-      //redirect to home page
-    }
-  }
+
+// Computed loading state
+const isLoading = computed(() =>
+  formType.value === "register"
+    ? regMutation?.isLoading?.value
+    : loginMutation?.isLoading?.value
 );
 </script>
 
@@ -170,15 +159,31 @@ watch(
         </div>
         <!-- Password Field -->
         <div class="relative">
+          <!-- Left lock icon -->
           <span class="absolute inset-y-0 left-0 flex items-center pl-4">
             <i class="pi pi-lock text-orange-500"></i>
           </span>
+          <!-- Password input with dynamic type -->
           <input
-            type="password"
+            :type="showPassword ? 'text' : 'password'"
             v-model="form.password"
             placeholder="Password"
-            class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
+            class="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
           />
+          <!-- Right eye icon for toggling visibility -->
+          <span
+            class="absolute inset-y-0 right-0 flex items-center pr-4 cursor-pointer"
+            @click="togglePassword"
+          >
+            <i
+              :class="
+                showPassword
+                  ? 'pi pi-eye-slash text-orange-500'
+                  : 'pi pi-eye text-orange-500'
+              "
+            ></i>
+          </span>
+          <!-- Error message -->
           <p v-if="errors.password" class="text-red-700">
             *Min 8 characters and mix with special character
           </p>
@@ -193,14 +198,10 @@ watch(
           class="w-full flex items-center justify-center bg-orange-400 hover:bg-orange-500 text-white font-semibold py-3 rounded-lg transition duration-300"
         >
           <!-- When loading, show spinner and "Sing In ...." -->
-          <template v-if="mutation.isLoading">
+          <template v-if="isLoading">
             <span>Register In .....</span>
             <!-- The spinner component with some right margin -->
-            <PulseLoader
-              :loading="mutation.isLoading"
-              color="#fff"
-              class="mr-2"
-            />
+            <PulseLoader :loading="isLoading" color="#fff" class="mr-2" />
           </template>
           <template v-else>
             <i class="pi pi-check mr-2"></i>
