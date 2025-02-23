@@ -8,22 +8,15 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-// Add this to your axios instance file (src/api/axios.js)
-
-// api.interceptors.request.use(
-//   (config) => {
-//     // Modify config (e.g., add Authorization header)
-//     // const token = localStorage.getItem('token');
-//     // if (token) {
-//     //   config.headers.Authorization = `Bearer ${token}`;
-//     // }
-//     return config;
-//   },
-//   (error) => {
-//     // Handle request error
-//     return Promise.reject(error);
-//   }
-// );
+api.interceptors.request.use(
+  (config) => {
+    // You can add headers here if needed
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 api.interceptors.response.use(
   (response) => {

@@ -1,8 +1,21 @@
 <script setup>
 import Category from "../components/CategoryCard.vue";
 import productsAPI from "../../apis/productsAPI";
-
+import { useQuery } from "@tanstack/vue-query";
 const { getFeaturedProducts } = productsAPI();
+
+const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
+
+const { data: products, isLoading } = useQuery({
+  queryKey: ["featuredProducts"],
+  queryFn: getFeaturedProducts,
+  staleTime: 1000 * 60 * 5, // 5 minutes before data becomes stale
+  cacheTime: 1000 * 60 * 30, // 30 minutes cache retention
+  refetchOnWindowFocus: false, // Disable automatic refetch on window focus
+  retry: 1, // Only retry once on failure
+  keepPreviousData: true, // Maintain previous data during refetches
+  select: (data) => data, // Optional: transform data if needed
+});
 </script>
 <template>
   <main class="flex-grow mb-[200px]">
@@ -72,47 +85,37 @@ const { getFeaturedProducts } = productsAPI();
         class="flex flex-wrap justify-center gap-x-32 gap-y-12 relative top-[450px]"
       >
         <!-- Product Card -->
-        <article class="w-72 relative group cursor-pointer">
-          <figure>
-            <img
-              class="w-full h-72 object-cover rounded-t-lg"
-              src="./product.png"
-              alt="Syltherine – Stylish cafe chair"
-            />
-          </figure>
-          <div
-            class="absolute bottom-0 left-0 w-full bg-gray-100 rounded-b-lg p-4"
-          >
-            <h3
-              class="text-2xl font-semibold text-neutral-700 font-['Poppins']"
-            >
-              Syltherine
-            </h3>
-            <p class="text-base text-zinc-500 font-medium font-['Poppins']">
-              Stylish cafe chair
-            </p>
-            <div class="flex items-center gap-4 mt-2">
-              <span
-                class="text-xl font-semibold text-neutral-700 font-['Poppins']"
-              >
-                Rp 2.500.000
-              </span>
-              <span
-                class="text-base font-normal text-zinc-400 font-['Poppins'] line-through"
-              >
-                Rp 3.500.000
-              </span>
+        <div class="product-cards-container">
+          <!-- Loading State: Display three loading cards -->
+          <div v-if="isLoading" class="cards-grid">
+            <div v-for="n in 3" :key="n" class="card loading-card">
+              <i class="pi pi-spin pi-spinner loading-icon"></i>
             </div>
           </div>
-          <div
-            class="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition duration-300 pointer-events-none"
-          ></div>
-          <button
-            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition duration-300 bg-white text-yellow-600 py-3 px-12 rounded whitespace-nowrap text-lg font-semibold hover:cursor-pointer"
-          >
-            Add to cart
-          </button>
-        </article>
+
+          <!-- Data Loaded: Loop through products and display product card -->
+          <div v-else class="cards-grid">
+            <div
+              v-for="(product, index) in products?.products"
+              :key="index"
+              class="card product-card"
+            >
+              <img
+                loading="lazy"
+                :src="`${IMAGE_URL}/products/${product.image}.png`"
+                :alt="product.title"
+              />
+              <div class="card-content">
+                <h3 class="card-title">{{ product.title }}</h3>
+                <p class="card-description">{{ product.description }}</p>
+                <div class="card-price">
+                  <i class="pi pi-tag"></i>
+                  <span>${{ product.price }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- Additional product cards can be added as similar <article> elements -->
       </div>
       <!-- Show More button -->
@@ -129,5 +132,79 @@ const { getFeaturedProducts } = productsAPI();
 <style scoped>
 .swiper {
   padding-bottom: 3rem;
+}
+
+.product-cards-container {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  text-align: center;
+  padding: 1rem;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Loading Card Styles */
+.loading-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.loading-icon {
+  font-size: 2rem;
+  color: #3498db;
+}
+
+/* Product Card Styles */
+.card-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.card-content {
+  margin-top: 1rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.card-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.card-price {
+  font-size: 1rem;
+  color: #27ae60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 </style>

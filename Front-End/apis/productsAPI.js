@@ -1,16 +1,17 @@
-import axios from "axios";
+import api from "./axios";
 
 export default function productsAPI() {
   const getFeaturedProducts = async () => {
-    const response = await axios.get("/products/featured");
+    console.log("getFeaturedProducts");
+    const response = await api.get("/products/featured");
     return response.data;
   };
   const getProducts = async () => {
-    const response = await axios.get("/products");
+    const response = await api.get("/products");
     return response.data;
   };
   const getProduct = async (id) => {
-    const response = await axios.get(`/products/${id}`);
+    const response = await api.get(`/products/${id}`);
     return response.data;
   };
   return {
