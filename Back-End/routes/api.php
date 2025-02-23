@@ -12,8 +12,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout')->middleware('auth:sanctum');
 });
 Route::controller(ProductController::class)->group(function () {
-    Route::resource('products', ProductController::class)->except(['create', 'edit']);
+    Route::get('products/featured', 'getFeatured');
     Route::get('products/category/{category}', 'getByCategory');
+    Route::resource('products', ProductController::class)->except(['create', 'edit']);
+
 });
 
 Route::resource('orders', OrderController::class)->middleware('auth:sanctum')->except(['create', 'edit']);

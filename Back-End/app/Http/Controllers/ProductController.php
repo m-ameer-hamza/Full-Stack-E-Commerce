@@ -19,6 +19,15 @@ class ProductController extends Controller
         ], 200);
     }
 
+    public function getFeatured()
+    {
+        $products = Product::where('isFeatured', true)->get();
+
+        return response()->json([
+            'message' => 'Featured products fetched successfully',
+            'products' => ProductResourse::collection($products),
+        ], 200);
+    }
     public function getByCategory($category)
     {
         if (!in_array($category, ['electronics', 'appliances', 'clothing', 'grocery'])) {

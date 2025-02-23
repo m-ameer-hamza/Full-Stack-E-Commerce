@@ -25,7 +25,7 @@ class ProductRequest extends FormRequest
             'title' => ['required', 'min:3', 'max:20'],
             'description' => ['required', 'min:10', 'max:255'],
             'price' => ['required', 'numeric', 'between:0,999999.99'],
-            'category' => ['required', 'in:electronics,grocery,cloth,appliances'],
+            'category' => ['required', 'in:electronics,grocery,clothing,appliances, mobile, accessories'],
         ];
     }
 
