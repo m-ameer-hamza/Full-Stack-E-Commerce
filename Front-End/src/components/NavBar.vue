@@ -29,7 +29,12 @@ const goToLogin = () => {
     >
       <!-- Logo -->
       <div class="mb-4 md:mb-0">
-        <div class="text-3xl md:text-4xl font-bold text-black">EcomNest</div>
+        <button
+          @click="router.push('/')"
+          class="text-3xl md:text-4xl font-bold text-black hover:cursor-pointer"
+        >
+          EcomNest
+        </button>
       </div>
 
       <!-- Navigation -->

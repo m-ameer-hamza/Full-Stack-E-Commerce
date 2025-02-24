@@ -1,9 +1,31 @@
 <script setup>
 import NavBar from "./components/NavBar.vue";
+import Hero from "./components/Hero.vue";
+import Banner from "./components/Banner.vue";
+import Footer from "./components/Footer.vue";
+import { ref, computed, watch } from "vue";
+import { useRoute } from "vue-router";
 import { RouterView } from "vue-router";
+
+const heroTitle = ref("");
+
+const route = useRoute();
+const showHero = computed(() => (route.path === "/" ? false : true));
+const showBanner = computed(() => (route.path === "/" ? false : true));
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath === "/products") {
+      heroTitle.value = "All Products";
+    }
+  }
+);
 </script>
 
 <template>
   <NavBar />
+  <Hero v-if="showHero" :heroTitle="heroTitle" />
   <RouterView />
+  <Banner v-if="showBanner" />
+  <Footer />
 </template>
