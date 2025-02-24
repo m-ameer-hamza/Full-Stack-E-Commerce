@@ -1,7 +1,10 @@
 <script setup>
 import Category from "../components/CategoryCard.vue";
+import ProductCards from "../components/ProductsCard.vue";
+import LoadingCards from "../components/LoadingCards.vue";
 import productsAPI from "../../apis/productsAPI";
 import { useQuery } from "@tanstack/vue-query";
+
 const { getFeaturedProducts } = productsAPI();
 
 const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
@@ -14,8 +17,10 @@ const { data: products, isLoading } = useQuery({
   refetchOnWindowFocus: false, // Disable automatic refetch on window focus
   retry: 1, // Only retry once on failure
   keepPreviousData: true, // Maintain previous data during refetches
-  select: (data) => data, // Optional: transform data if needed
+  select: (data) => data.products, // Optional: transform data if needed
 });
+
+// console.log(products.value[0]);
 </script>
 <template>
   <main class="flex-grow mb-[200px]">
@@ -88,40 +93,18 @@ const { data: products, isLoading } = useQuery({
         <div class="product-cards-container">
           <!-- Loading State: Display three loading cards -->
           <div v-if="isLoading" class="cards-grid">
-            <div v-for="n in 3" :key="n" class="card loading-card">
-              <i class="pi pi-spin pi-spinner loading-icon"></i>
-            </div>
+            <LoadingCards />
           </div>
 
           <!-- Data Loaded: Loop through products and display product card -->
           <div v-else class="cards-grid">
-            <div
-              v-for="(product, index) in products?.products"
-              :key="index"
-              class="card product-card"
-            >
-              <img
-                loading="lazy"
-                :src="`${IMAGE_URL}/products/${product.image}.png`"
-                :alt="product.title"
-              />
-              <div class="card-content">
-                <h3 class="card-title">{{ product.title }}</h3>
-                <p class="card-description">{{ product.description }}</p>
-                <div class="card-price">
-                  <i class="pi pi-tag"></i>
-                  <span>${{ product.price }}</span>
-                </div>
-              </div>
-            </div>
+            <ProductCards :products="products" />
           </div>
         </div>
-        <!-- Additional product cards can be added as similar <article> elements -->
       </div>
       <!-- Show More button -->
       <button
-        type="button"
-        class="w-74 h-14 relative top-[535px] mx-auto group flex items-center justify-center cursor-pointer bg-white border border-yellow-600 transition duration-300 text-yellow-600 text-lg font-semibold font-['Poppins'] leading-normal whitespace-nowrap hover:bg-yellow-600 hover:border-yellow-600 hover:text-white"
+        class="top-[500px] relative px-24 py-3 mx-auto group flex items-center justify-center cursor-pointer bg-gradient-to-r from-yellow-500 to-yellow-600 border border-transparent transition-all duration-300 text-white text-2xl font-semibold font-['Poppins'] rounded-lg shadow-md hover:from-yellow-600 hover:to-yellow-500 hover:shadow-lg transform hover:scale-105"
       >
         Show More
       </button>
@@ -146,65 +129,5 @@ const { data: products, isLoading } = useQuery({
   gap: 1.5rem;
   width: 100%;
   max-width: 1200px;
-}
-
-.card {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease;
-  text-align: center;
-  padding: 1rem;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-/* Loading Card Styles */
-.loading-card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-}
-
-.loading-icon {
-  font-size: 2rem;
-  color: #3498db;
-}
-
-/* Product Card Styles */
-.card-image {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.card-content {
-  margin-top: 1rem;
-}
-
-.card-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 0.5rem 0;
-}
-
-.card-description {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-}
-
-.card-price {
-  font-size: 1rem;
-  color: #27ae60;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
 }
 </style>

@@ -21,7 +21,9 @@ class ProductController extends Controller
 
     public function getFeatured()
     {
-        $products = Product::where('isFeatured', true)->get();
+        $products = Product::where('isFeatured', true)
+            ->limit(8)
+            ->get();
 
         return response()->json([
             'message' => 'Featured products fetched successfully',
