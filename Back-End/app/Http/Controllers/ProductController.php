@@ -11,11 +11,16 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        // Fetch 9 products per page
+        $products = Product::paginate(9);
 
         return response()->json([
-            'message' => 'Products fetched successfully',
-            'products' => ProductResourse::collection($products),
+            'message'      => 'Products fetched successfully',
+            'products'     => ProductResourse::collection($products),
+            'current_page' => $products->currentPage(),
+            'last_page'    => $products->lastPage(),
+            'total'        => $products->total(),
+            'per_page'     => $products->perPage(),
         ], 200);
     }
 

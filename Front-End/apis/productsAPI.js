@@ -6,8 +6,8 @@ export default function productsAPI() {
     const response = await api.get("/products/featured");
     return response.data;
   };
-  const getProducts = async () => {
-    const response = await api.get("/products");
+  const getProducts = async (pageNum = 1) => {
+    const response = await api.get(`/products?page=${pageNum}`);
     return response.data;
   };
   const getProduct = async (id) => {

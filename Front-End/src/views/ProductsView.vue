@@ -1,34 +1,44 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed, watchEffect } from "vue";
+import { useQuery } from "@tanstack/vue-query";
+import productsAPI from "../../apis/productsAPI.js";
 import ProductCards from "../components/ProductsCard.vue";
 import LoadingCards from "../components/LoadingCards.vue";
-import productsAPI from "../../apis/productsAPI";
-import { useQuery } from "@tanstack/vue-query";
+import { RouterLink } from "vue-router";
 
-const showFilterDropdown = ref(false);
-const showCategoryDropdown = ref(false);
+// Pagination state
+const currPage = ref(1);
+const lastPage = ref(1);
 
-function toggleFilter() {
-  showFilterDropdown.value = !showFilterDropdown.value;
-  if (showFilterDropdown.value) showCategoryDropdown.value = false;
-}
+const { getProducts } = productsAPI();
 
-function toggleCategory() {
-  showCategoryDropdown.value = !showCategoryDropdown.value;
-  if (showCategoryDropdown.value) showFilterDropdown.value = false;
-}
-
-const { getFeaturedProducts } = productsAPI();
-const { data: products, isLoading } = useQuery({
-  queryKey: ["featuredProducts"],
-  queryFn: getFeaturedProducts,
+// Fetch products (full response including pagination metadata)
+const { data: productResponse, isLoading } = useQuery({
+  queryKey: ["featuredProducts", currPage],
+  queryFn: () => getProducts(currPage.value),
   staleTime: 1000 * 60 * 5,
   cacheTime: 1000 * 60 * 30,
   refetchOnWindowFocus: false,
   retry: 1,
   keepPreviousData: true,
-  select: (data) => data.products,
 });
+
+// Use watchEffect to update lastPage when productResponse changes
+watchEffect(() => {
+  if (productResponse.value && productResponse.value.last_page) {
+    lastPage.value = productResponse.value.last_page;
+  }
+});
+
+// Extract products array for display (assumes API returns { products: [...] })
+const products = computed(() =>
+  productResponse.value ? productResponse.value.products : []
+);
+
+// Change page function
+function changePage(page) {
+  currPage.value = page;
+}
 </script>
 <template>
   <main class="flex-grow mb-[200px]">
@@ -177,22 +187,18 @@ const { data: products, isLoading } = useQuery({
         </div>
       </div>
     </div>
-    <!-- Products will be displayed here -->
+    <!-- Products -->
     <div
       class="flex flex-wrap max-w-screen-xl mx-auto justify-center gap-x-32 gap-y-12 relative top-10"
     >
-      <!-- These cards will render dynamically from card component. Replace this in Vue -->
       <!-- Product Card -->
       <div class="p-8 flex justify-center">
-        <!-- Loading State: Display three loading cards -->
         <div
           v-if="isLoading"
           class="grid grid-cols-[repeat(3,minmax(400px,1fr))] gap-24 w-full max-w-[1200px]"
         >
           <LoadingCards />
         </div>
-
-        <!-- Data Loaded: Loop through products and display product card -->
         <div
           v-else
           class="grid grid-cols-[repeat(3,minmax(400px,1fr))] gap-24 w-full max-w-[1200px]"
@@ -200,39 +206,26 @@ const { data: products, isLoading } = useQuery({
           <ProductCards :products="products" />
         </div>
       </div>
-
-      <!-- Pagination div -->
+      <!-- Pagination Buttons -->
       <div
         class="flex gap-10 items-start pt-8 text-xl text-black whitespace-nowrap"
       >
-        <div class="flex flex-col text-black rounded-xl w-[60px]">
+        <div
+          v-for="page in lastPage"
+          :key="page"
+          class="flex flex-col rounded-xl w-[60px]"
+        >
           <div
-            class="px-1.5 bg-yellow-600 rounded-xl h-[60px] w-[60px] flex items-center justify-center"
+            @click="changePage(page)"
+            :class="[
+              'px-1.5 rounded-xl h-[60px] w-[60px] flex items-center justify-center cursor-pointer',
+              page === currPage ? 'bg-yellow-600' : 'bg-orange-50',
+            ]"
             role="button"
             tabindex="0"
-            aria-label="Step 1"
+            :aria-label="'Step ' + page"
           >
-            1
-          </div>
-        </div>
-        <div class="flex flex-col rounded-xl w-[60px]">
-          <div
-            class="px-1.5 bg-orange-50 rounded-xl h-[60px] w-[60px] flex items-center justify-center"
-            role="button"
-            tabindex="0"
-            aria-label="Step 2"
-          >
-            2
-          </div>
-        </div>
-        <div class="flex flex-col rounded-xl w-[60px]">
-          <div
-            class="px-1.5 bg-orange-50 rounded-xl h-[60px] w-[60px] flex items-center justify-center"
-            role="button"
-            tabindex="0"
-            aria-label="Step 3"
-          >
-            3
+            {{ page }}
           </div>
         </div>
       </div>
