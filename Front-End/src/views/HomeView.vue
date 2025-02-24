@@ -51,7 +51,7 @@ const { data: products, isLoading } = useQuery({
 
     <!------------------ Category Section ----------- -->
     <section>
-      <div class="w-96 h-20 top-[180px] mx-auto relative">
+      <div class="w-96 h-20 top-[58px] mx-auto relative">
         <div
           class="left-[94px] top-0 absolute text-zinc-800 text-3xl font-bold font-['Poppins']"
         >
@@ -65,7 +65,7 @@ const { data: products, isLoading } = useQuery({
       </div>
 
       <!-- Category Cards -->
-      <div class="relative top-[290px]">
+      <div class="relative top-28">
         <Category />
       </div>
     </section>
