@@ -6,9 +6,6 @@ import productsAPI from "../../apis/productsAPI";
 import { useQuery } from "@tanstack/vue-query";
 
 const { getFeaturedProducts } = productsAPI();
-
-const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
-
 const { data: products, isLoading } = useQuery({
   queryKey: ["featuredProducts"],
   queryFn: getFeaturedProducts,

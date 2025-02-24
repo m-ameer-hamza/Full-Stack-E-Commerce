@@ -34,7 +34,7 @@ const goToLogin = () => {
 
       <!-- Navigation -->
       <nav class="mb-4 md:mb-0">
-        <ul class="flex space-x-8">
+        <ul class="flex space-x-12">
           <li>
             <RouterLink
               to="/"
@@ -45,10 +45,10 @@ const goToLogin = () => {
           </li>
           <li>
             <RouterLink
-              to="/shop"
+              to="/products"
               class="text-lg text-gray-800 hover:text-orange-500 transition-colors"
             >
-              Shop
+              All Products
             </RouterLink>
           </li>
           <li>
