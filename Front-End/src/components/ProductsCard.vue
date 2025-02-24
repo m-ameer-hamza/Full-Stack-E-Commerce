@@ -5,39 +5,100 @@ const { products } = defineProps({
     required: true,
   },
 });
+console.log(products);
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 </script>
 
 <template>
-  <div
-    v-for="(product, index) in products"
-    :key="index"
-    class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 ease hover:-translate-y-1 text-center p-4 flex flex-col justify-between"
-  >
-    <div class="w-[363px] h-[435px] overflow-hidden rounded">
-      <img
-        loading="lazy"
-        :src="`${BASE_URL}${product.imagePath}`"
-        :alt="product.title"
-        class="w-[97%] h-[97%] object-cover"
-      />
-    </div>
-    <div class="mt-4 flex-1">
-      <h3 class="text-[1.2rem] font-bold my-2">{{ product.title }}</h3>
-      <p class="text-[0.9rem] text-[#666] mb-2">{{ product.description }}</p>
-    </div>
-    <div class="flex items-center justify-between mt-4">
-      <div class="flex items-center gap-2 text-base text-[#27ae60]">
-        <i class="pi pi-tag"></i>
-        <span>${{ product.price }}</span>
+  <div class="grid grid-cols-4 gap-x-10 gap-y-10">
+    <article
+      v-for="(product, index) in products"
+      :key="product.id"
+      class="w-[285px] h-[446px] relative group cursor-pointer"
+    >
+      <!-- Product Image -->
+      <figure>
+        <img
+          loading="lazy"
+          class="w-full h-[301px] object-cover rounded-t-lg"
+          :src="`${BASE_URL}${product.imagePath}`"
+          alt="Syltherine – Stylish cafe chair"
+        />
+      </figure>
+
+      <!-- Product Info -->
+      <div class="absolute bottom-0 left-0 w-full bg-gray-100 rounded-b-lg p-4">
+        <h3 class="text-2xl font-semibold text-neutral-700 font-['Poppins']">
+          {{ product.title }}
+        </h3>
+        <p class="text-base text-zinc-500 font-medium font-['Poppins']">
+          {{ product.description }}
+        </p>
+        <div class="flex items-center gap-4 mt-2">
+          <span class="text-xl font-semibold text-neutral-700 font-['Poppins']">
+            $ {{ product.price }}
+          </span>
+          <span
+            class="text-base font-normal text-zinc-400 font-['Poppins'] line-through"
+          >
+            $ {{ parseFloat(product.price) + 50 }}
+          </span>
+        </div>
       </div>
+
+      <!-- Black Overlay -->
+      <div
+        class="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition duration-300 pointer-events-none"
+      ></div>
+
+      <!-- Add to Cart Button -->
       <button
-        type="button"
-        class="bg-gradient-to-r from-[#f39c12] to-[#e67e22] text-white py-2 px-4 rounded-full flex items-center gap-2 cursor-pointer transition-all duration-300 ease-in-out shadow-md text-base hover:scale-105 hover:bg-gradient-to-r hover:from-[#e67e22] hover:to-[#d35400]"
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition duration-300 bg-white text-yellow-600 py-3 px-12 rounded whitespace-nowrap text-lg font-semibold hover:cursor-pointer z-10"
       >
-        <i class="pi pi-shopping-cart"></i>
-        <span>Add to Cart</span>
+        Add to cart
       </button>
-    </div>
+
+      <!-- Action Menu (Share, Compare, Like) -->
+      <div
+        class="absolute left-1/2 -translate-x-1/2 top-[calc(50%+60px)] flex gap-7 items-center text-base font-semibold text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition duration-300 z-10"
+        aria-label="Action menu"
+      >
+        <!-- Share Button -->
+        <button
+          type="button"
+          class="flex gap-0.5 justify-center items-center self-stretch my-auto hover:opacity-80 transition-opacity"
+          aria-label="Share"
+        >
+          <icon
+            class="pi pi-share-alt object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
+          ></icon>
+          <span class="self-stretch my-auto">Share</span>
+        </button>
+
+        <!-- Compare Button -->
+        <button
+          type="button"
+          class="flex gap-0.5 justify-center items-center self-stretch my-auto hover:opacity-80 transition-opacity"
+          aria-label="Compare"
+        >
+          <icon
+            class="pi pi-arrow-right-arrow-left object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
+          ></icon>
+          <span class="self-stretch my-auto">Compare</span>
+        </button>
+
+        <!-- Like Button -->
+        <button
+          type="button"
+          class="flex gap-0.5 justify-center items-center self-stretch my-auto hover:opacity-80 transition-opacity"
+          aria-label="Like"
+        >
+          <icon
+            class="pi pi-heart object-contain shrink-0 self-stretch my-auto w-4 aspect-square"
+          ></icon>
+          <span class="self-stretch my-auto">Like</span>
+        </button>
+      </div>
+    </article>
   </div>
 </template>

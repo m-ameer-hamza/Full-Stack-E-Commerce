@@ -30,5 +30,5 @@ watch(
   <Hero v-if="isHeroAndBannerVisible" :heroTitle="heroTitle" />
   <RouterView />
   <Banner v-if="isHeroAndBannerVisible" />
-  <Footer />
+  <!-- <Footer /> -->
 </template>

@@ -71,8 +71,8 @@ const { data: products, isLoading } = useQuery({
     </section>
 
     <!-------------- Products Section ---------->
-    <section class="relative">
-      <header class="text-center relative top-[415px] mx-auto w-96 h-20">
+    <section class="relative top-44">
+      <header class="text-center relative mx-auto w-96 h-20">
         <h2
           class="text-neutral-700 text-4xl font-bold font-['Poppins'] leading-10"
         >
@@ -80,30 +80,12 @@ const { data: products, isLoading } = useQuery({
         </h2>
       </header>
 
-      <div
-        class="flex flex-wrap justify-center gap-x-32 gap-y-12 relative top-[450px]"
-      >
+      <!-- Products Cards -->
+      <div class="max-w-[1260px] mx-auto relative top-4">
         <!-- Product Card -->
-        <div class="container mx-auto px-6 relative top-[50px]">
-          <div class="p-8">
-            <!-- Loading State: Display loading cards -->
-            <div
-              v-if="isLoading"
-              class="grid grid-cols-[repeat(4,minmax(250px,1fr))] gap-12"
-            >
-              <LoadingCards />
-            </div>
-
-            <!-- Data Loaded: Loop through products and display product card -->
-            <div
-              v-else
-              class="grid grid-cols-[repeat(4,minmax(250px,1fr))] gap-12"
-            >
-              <ProductCards :products="products" />
-            </div>
-          </div>
-        </div>
+        <ProductCards :products="products" />
       </div>
+
       <!-- Show More button -->
       <!-- <button
         class="top-[500px] relative px-24 py-3 mx-auto group flex items-center justify-center cursor-pointer bg-gradient-to-r from-yellow-500 to-yellow-600 border border-transparent transition-all duration-300 text-white text-2xl font-semibold font-['Poppins'] rounded-lg shadow-md hover:from-yellow-600 hover:to-yellow-500 hover:shadow-lg transform hover:scale-105"

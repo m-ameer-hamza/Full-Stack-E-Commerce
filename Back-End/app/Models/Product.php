@@ -22,6 +22,6 @@ class Product extends Model
 
     public function getLocalImagePathAttribute ()
     {
-        return '/storage/images/products/' . $this->image . '.png';
+        return '/storage/images/products/' . $this->image . '.jpeg';
     }
 }
