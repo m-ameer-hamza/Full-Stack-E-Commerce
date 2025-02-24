@@ -27,7 +27,7 @@ class ProductController extends Controller
     public function getFeatured()
     {
         $products = Product::where('isFeatured', true)
-            ->limit(6)
+            ->limit(8)
             ->get();
 
         return response()->json([

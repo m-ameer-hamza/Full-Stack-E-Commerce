@@ -5,7 +5,7 @@ const { products } = defineProps({
     required: true,
   },
 });
-const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
     <div class="w-[363px] h-[435px] overflow-hidden rounded">
       <img
         loading="lazy"
-        :src="`${IMAGE_URL}/products/${product.image}.png`"
+        :src="`${BASE_URL}${product.imagePath}`"
         :alt="product.title"
         class="w-[97%] h-[97%] object-cover"
       />

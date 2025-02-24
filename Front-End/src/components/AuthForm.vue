@@ -8,15 +8,7 @@ import { useUserStore } from "../stores/userStore.js";
 import authAPI from "../../apis/authAPI.js";
 
 const props = defineProps({
-  showName: {
-    type: Boolean,
-    default: true,
-  },
-  formTitle: {
-    type: String,
-    default: "Register",
-  },
-  btnTitle: {
+  title: {
     type: String,
     default: "Register",
   },
@@ -27,8 +19,12 @@ const toast = useToast();
 const { register, login } = authAPI();
 const userStore = useUserStore();
 
-const formType = computed(() => (props.showName ? "register" : "login"));
+const formType = computed(() =>
+  props.title === "Register" ? "register" : "login"
+);
 const showPassword = ref(false);
+const isNameVisible = computed(() => props.title === "Register");
+const isRegisterForm = computed(() => props.title === "Register");
 
 // Form state
 const form = reactive({
@@ -126,11 +122,11 @@ const isLoading = computed(() =>
   <div class="min-h-screen flex items-center justify-center bg-gray-100 pb-4">
     <div class="w-full max-w-lg p-10 space-y-8 bg-white rounded-lg shadow-lg">
       <h2 class="text-center text-3xl font-bold text-gray-800">
-        {{ formTitle }}
+        {{ isRegisterForm ? "Sign Up" : "Login" }}
       </h2>
       <form class="space-y-6">
         <!-- Name Field -->
-        <div v-if="showName" class="relative">
+        <div v-if="isNameVisible" class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-4">
             <i class="pi pi-user text-orange-500"></i>
           </span>
@@ -141,7 +137,7 @@ const isLoading = computed(() =>
             class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
           />
           <p v-if="errors.name" class="text-red-700">
-            *Min 5 letters and no special character
+            Min 5 letters and no special character
           </p>
         </div>
         <!-- Email Field -->
@@ -155,7 +151,7 @@ const isLoading = computed(() =>
             placeholder="Email"
             class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
           />
-          <p v-if="errors.email" class="text-red-700">*Email is Invalide</p>
+          <p v-if="errors.email" class="text-red-700">Email is invalid</p>
         </div>
         <!-- Password Field -->
         <div class="relative">
@@ -183,17 +179,15 @@ const isLoading = computed(() =>
               "
             ></i>
           </span>
-          <!-- Error message -->
           <p v-if="errors.password" class="text-red-700">
-            *Min 8 characters and mix with special character
+            Min 8 characters and mix with special character
           </p>
         </div>
 
         <!-- Register Button -->
-
         <button
           type="button"
-          v-if="btnTitle === 'Register'"
+          v-if="title === 'Register'"
           @click="handleSubmit('register')"
           class="w-full flex items-center justify-center bg-orange-400 hover:bg-orange-500 text-white font-semibold py-3 rounded-lg transition duration-300"
         >
@@ -204,8 +198,7 @@ const isLoading = computed(() =>
             <PulseLoader :loading="isLoading" color="#fff" class="mr-2" />
           </template>
           <template v-else>
-            <i class="pi pi-check mr-2"></i>
-            <span>Register</span>
+            <span>Sign up</span>
           </template>
         </button>
 
@@ -216,22 +209,20 @@ const isLoading = computed(() =>
           @click="handleSubmit('login')"
           class="w-full flex items-center justify-center bg-orange-400 hover:bg-orange-500 text-white font-semibold py-3 rounded-lg transition duration-300"
         >
-          <i class="pi pi-check mr-2"></i>
           Login
         </button>
       </form>
-      <!-- Sign/Register In Link -->
-      <div v-if="btnTitle === 'Register'" class="text-center">
+
+      <div class="text-center">
         <RouterLink
-          to="/login"
+          :to="isRegisterForm ? '/login' : '/register'"
           class="text-orange-500 hover:underline font-medium"
         >
-          Already Registered? Sign In Now
-        </RouterLink>
-      </div>
-      <div v-else class="text-center">
-        <RouterLink to="/" class="text-orange-500 hover:underline font-medium">
-          New User? Register Now
+          {{
+            isRegisterForm
+              ? "Already Registered? Sign In Now"
+              : "New User? Register Now"
+          }}
         </RouterLink>
       </div>
     </div>

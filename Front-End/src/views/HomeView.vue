@@ -51,22 +51,21 @@ const { data: products, isLoading } = useQuery({
 
     <!------------------ Category Section ----------- -->
     <section>
-      <div class="w-96 h-20 top-[80px] mx-auto relative">
-        <h2
-          class="absolute left-[85px] top-0 text-zinc-800 text-3xl font-bold font-['Poppins']"
+      <div class="w-96 h-20 top-[180px] mx-auto relative">
+        <div
+          class="left-[94px] top-0 absolute text-zinc-800 text-3xl font-bold font-['Poppins']"
         >
           Browse The Range
-        </h2>
-        <p
+        </div>
+        <div
           class="w-96 h-7 top-[48px] relative mx-auto text-center text-stone-500 text-xl font-normal font-['Poppins'] whitespace-nowrap overflow-hidden"
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </p>
+        </div>
       </div>
 
-      <!-- Slider Container -->
-
-      <div class="my-10 relative top-40 w-[95%] mx-auto">
+      <!-- Category Cards -->
+      <div class="relative top-[290px]">
         <Category />
       </div>
     </section>
@@ -85,36 +84,32 @@ const { data: products, isLoading } = useQuery({
         class="flex flex-wrap justify-center gap-x-32 gap-y-12 relative top-[450px]"
       >
         <!-- Product Card -->
-        <div class="p-8 flex justify-center">
-          <!-- Loading State: Display three loading cards -->
-          <div
-            v-if="isLoading"
-            class="grid grid-cols-[repeat(3,minmax(300px,1fr))] gap-24 w-full max-w-[1200px]"
-          >
-            <LoadingCards />
-          </div>
+        <div class="container mx-auto px-6 relative top-[50px]">
+          <div class="p-8">
+            <!-- Loading State: Display loading cards -->
+            <div
+              v-if="isLoading"
+              class="grid grid-cols-[repeat(4,minmax(250px,1fr))] gap-12"
+            >
+              <LoadingCards />
+            </div>
 
-          <!-- Data Loaded: Loop through products and display product card -->
-          <div
-            v-else
-            class="grid grid-cols-[repeat(3,minmax(300px,1fr))] gap-24 w-full max-w-[1200px]"
-          >
-            <ProductCards :products="products" />
+            <!-- Data Loaded: Loop through products and display product card -->
+            <div
+              v-else
+              class="grid grid-cols-[repeat(4,minmax(250px,1fr))] gap-12"
+            >
+              <ProductCards :products="products" />
+            </div>
           </div>
         </div>
       </div>
       <!-- Show More button -->
-      <button
+      <!-- <button
         class="top-[500px] relative px-24 py-3 mx-auto group flex items-center justify-center cursor-pointer bg-gradient-to-r from-yellow-500 to-yellow-600 border border-transparent transition-all duration-300 text-white text-2xl font-semibold font-['Poppins'] rounded-lg shadow-md hover:from-yellow-600 hover:to-yellow-500 hover:shadow-lg transform hover:scale-105"
       >
         Show More
-      </button>
+      </button> -->
     </section>
   </main>
 </template>
-
-<style scoped>
-.swiper {
-  padding-bottom: 3rem;
-}
-</style>

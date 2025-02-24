@@ -1,9 +1,8 @@
 <script setup>
 import AuthForm from "@/components/AuthForm.vue";
 import { ref } from "vue";
-const showName = ref("");
-const showRegisterAs = ref("");
+const isNameVisible = ref("");
 </script>
 <template>
-  <AuthForm :showName="false" formTitle="Login" btnTitle="login" />
+  <AuthForm title="Login" />
 </template>

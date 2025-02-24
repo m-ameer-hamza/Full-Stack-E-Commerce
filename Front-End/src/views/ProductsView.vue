@@ -7,14 +7,14 @@ import LoadingCards from "../components/LoadingCards.vue";
 import Hero from "../components/Hero.vue";
 import { RouterLink } from "vue-router";
 
-const currPage = ref(1);
+const currentPage = ref(1);
 const lastPage = ref(1);
 
 const { getProducts } = productsAPI();
 
 const { data: productResponse, isLoading } = useQuery({
-  queryKey: ["featuredProducts", currPage],
-  queryFn: () => getProducts(currPage.value),
+  queryKey: ["featuredProducts", currentPage],
+  queryFn: () => getProducts(currentPage.value),
   staleTime: 1000 * 60 * 5,
   cacheTime: 1000 * 60 * 30,
   refetchOnWindowFocus: false,
@@ -33,7 +33,7 @@ const products = computed(() =>
 );
 
 function changePage(page) {
-  currPage.value = page;
+  currentPage.value = page;
 }
 </script>
 <template>
@@ -176,7 +176,7 @@ function changePage(page) {
             @click="changePage(page)"
             :class="[
               'px-1.5 rounded-xl h-[60px] w-[60px] flex items-center justify-center cursor-pointer',
-              page === currPage ? 'bg-yellow-600' : 'bg-orange-50',
+              page === currentPage ? 'bg-yellow-600' : 'bg-orange-50',
             ]"
             role="button"
             tabindex="0"

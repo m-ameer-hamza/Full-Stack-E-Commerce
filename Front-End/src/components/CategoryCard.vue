@@ -1,76 +1,26 @@
 <script setup>
-import electrical from "../assets/img/electronicCat.png";
-import clothing from "../assets/img/clothCat.png";
-import furniture from "../assets/img/furniture.png";
-import grocery from "../assets/img/groceryCat.png";
-import mobile from "../assets/img/mobileCat.png";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-
-import SwiperCore from "swiper";
-import { Navigation, Pagination } from "swiper/modules";
-SwiperCore.use([Navigation, Pagination]);
-const cards = [
-  {
-    image: electrical,
-    caption: "Electrical",
-  },
-  {
-    image: grocery,
-    caption: "Grocery",
-  },
-  {
-    image: mobile,
-    caption: "Mobiles & Accessories",
-  },
-  {
-    image: clothing,
-    caption: "Clothing",
-  },
-  {
-    image: furniture,
-    caption: "Furniture",
-  },
-  {
-    image: mobile,
-    caption: "Mobiles & Accessories",
-  },
+const categories = [
+  { name: "Electronics", image: "/electrical.png" },
+  { name: "Tech Gadgets", image: "/gadets.png" },
+  { name: "Furniture", image: "/category3.png" },
 ];
 </script>
 
 <template>
-  <Swiper
-    :slides-per-view="3"
-    :space-between="32"
-    :slides-offset-before="94"
-    :slides-offset-after="64"
-    :loop="false"
-    navigation
-    pagination
-    class="swiper w-full"
-  >
-    <SwiperSlide
-      v-for="(card, index) in cards"
-      :key="index"
-      class="flex justify-center"
-    >
-      <figure
-        class="w-72 h-72 relative hover:cursor-pointer rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105"
-      >
+  <div class="flex justify-center space-x-40">
+    <figure v-for="(category, index) in categories" :key="index" class="w-96">
+      <!-- Image Container -->
+      <div class="relative bg-neutral-900 rounded-lg overflow-hidden w-96 h-96">
         <img
-          loading="lazy"
-          class="w-full h-full object-cover"
-          :src="card.image"
-          :alt="card.caption + ' Category'"
+          class="absolute inset-0 object-cover w-full h-full bg-gray-100"
+          :src="category.image"
+          :alt="category.name"
         />
-        <figcaption
-          class="pointer-events-none absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white text-center py-2 text-lg font-semibold"
-        >
-          {{ card.caption }}
-        </figcaption>
-      </figure>
-    </SwiperSlide>
-  </Swiper>
+      </div>
+      <!-- Caption outside the overflow-hidden container -->
+      <figcaption class="mt-2 text-center text-lg font-semibold text-black">
+        {{ category.name }}
+      </figcaption>
+    </figure>
+  </div>
 </template>

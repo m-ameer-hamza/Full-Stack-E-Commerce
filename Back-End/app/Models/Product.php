@@ -19,4 +19,9 @@ class Product extends Model
         'image',
         'isFeatured',
     ];
+
+    public function getLocalImagePathAttribute ()
+    {
+        return '/storage/images/products/' . $this->image . '.png';
+    }
 }

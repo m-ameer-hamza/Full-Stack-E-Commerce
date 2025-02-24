@@ -8,10 +8,13 @@ import { useRoute } from "vue-router";
 import { RouterView } from "vue-router";
 
 const heroTitle = ref("");
-
 const route = useRoute();
-const showHero = computed(() => (route.path === "/" ? false : true));
-const showBanner = computed(() => (route.path === "/" ? false : true));
+
+const isHeroAndBannerVisible = computed(() => {
+  const excludedPaths = ["/", "/login", "/register"];
+  return excludedPaths.includes(route.path) ? false : true;
+});
+
 watch(
   () => route.path,
   (newPath) => {
@@ -24,8 +27,8 @@ watch(
 
 <template>
   <NavBar />
-  <Hero v-if="showHero" :heroTitle="heroTitle" />
+  <Hero v-if="isHeroAndBannerVisible" :heroTitle="heroTitle" />
   <RouterView />
-  <Banner v-if="showBanner" />
+  <Banner v-if="isHeroAndBannerVisible" />
   <Footer />
 </template>

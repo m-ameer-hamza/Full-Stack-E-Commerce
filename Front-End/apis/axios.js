@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useToast } from "vue-toastification";
+
 const toast = useToast();
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
@@ -8,6 +10,7 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+
 api.interceptors.request.use(
   (config) => {
     // You can add headers here if needed
@@ -24,33 +27,15 @@ api.interceptors.response.use(
   },
   (error) => {
     console.log("error from response interceptor", error);
-    if (error.response?.status === 422) {
-      const message = error.response?.data?.message;
+    const status = error.response?.status;
+    const message = error.response?.data?.message || "Something went wrong";
+
+    if ([422, 401, 403, 404, 500].includes(status)) {
       toast.error(message);
-      return Promise.reject(error);
-    }
-    if (error.response?.status === 401) {
-      const message = error.response?.data?.message;
-      toast.error(message);
-      return Promise.reject(error);
-    }
-    if (error.response?.status === 403) {
-      const message = error.response?.data?.message;
-      toast.error(message);
-      return Promise.reject(error);
-    }
-    if (error.response?.status === 404) {
-      const message = error.response?.data?.message;
-      toast.error(message);
-      return Promise.reject(error);
-    }
-    if (error.response?.status === 500) {
-      const message = error.response?.data?.message;
-      toast.error(message);
-      return Promise.reject(error);
     } else {
       toast.error("Something went wrong");
     }
+
     return Promise.reject(error);
   }
 );

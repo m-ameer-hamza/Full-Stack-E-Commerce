@@ -13,12 +13,7 @@ const icon = computed(() =>
 );
 
 const goToLogin = () => {
-  if (route.path !== "/login") {
-    router.push("login");
-  } else {
-    // Optionally, navigate to another route (e.g., register)
-    router.push("register");
-  }
+  route.path === "/login" ? router.push("register") : router.push("login");
 };
 </script>
 
