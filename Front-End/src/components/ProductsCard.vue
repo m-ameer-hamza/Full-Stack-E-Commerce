@@ -7,72 +7,37 @@ const { products } = defineProps({
 });
 const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
 </script>
+
 <template>
   <div
     v-for="(product, index) in products"
     :key="index"
-    class="card product-card"
+    class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 ease hover:-translate-y-1 text-center p-4 flex flex-col justify-between"
   >
-    <img
-      loading="lazy"
-      :src="`${IMAGE_URL}/products/${product.image}.png`"
-      :alt="product.title"
-    />
-    <div class="card-content">
-      <h3 class="card-title">{{ product.title }}</h3>
-      <p class="card-description">{{ product.description }}</p>
-      <div class="card-price">
+    <div class="w-[363px] h-[435px] overflow-hidden rounded">
+      <img
+        loading="lazy"
+        :src="`${IMAGE_URL}/products/${product.image}.png`"
+        :alt="product.title"
+        class="w-[97%] h-[97%] object-cover"
+      />
+    </div>
+    <div class="mt-4 flex-1">
+      <h3 class="text-[1.2rem] font-bold my-2">{{ product.title }}</h3>
+      <p class="text-[0.9rem] text-[#666] mb-2">{{ product.description }}</p>
+    </div>
+    <div class="flex items-center justify-between mt-4">
+      <div class="flex items-center gap-2 text-base text-[#27ae60]">
         <i class="pi pi-tag"></i>
         <span>${{ product.price }}</span>
       </div>
+      <button
+        type="button"
+        class="bg-gradient-to-r from-[#f39c12] to-[#e67e22] text-white py-2 px-4 rounded-full flex items-center gap-2 cursor-pointer transition-all duration-300 ease-in-out shadow-md text-base hover:scale-105 hover:bg-gradient-to-r hover:from-[#e67e22] hover:to-[#d35400]"
+      >
+        <i class="pi pi-shopping-cart"></i>
+        <span>Add to Cart</span>
+      </button>
     </div>
   </div>
 </template>
-
-<style scoped>
-.card {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease;
-  text-align: center;
-  padding: 1rem;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-/* Product Card Styles */
-.card-image {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.card-content {
-  margin-top: 1rem;
-}
-
-.card-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 0.5rem 0;
-}
-
-.card-description {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-}
-
-.card-price {
-  font-size: 1rem;
-  color: #27ae60;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-</style>

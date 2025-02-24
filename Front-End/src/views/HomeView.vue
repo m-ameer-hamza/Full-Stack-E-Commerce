@@ -12,15 +12,13 @@ const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
 const { data: products, isLoading } = useQuery({
   queryKey: ["featuredProducts"],
   queryFn: getFeaturedProducts,
-  staleTime: 1000 * 60 * 5, // 5 minutes before data becomes stale
-  cacheTime: 1000 * 60 * 30, // 30 minutes cache retention
-  refetchOnWindowFocus: false, // Disable automatic refetch on window focus
-  retry: 1, // Only retry once on failure
-  keepPreviousData: true, // Maintain previous data during refetches
-  select: (data) => data.products, // Optional: transform data if needed
+  staleTime: 1000 * 60 * 5,
+  cacheTime: 1000 * 60 * 30,
+  refetchOnWindowFocus: false,
+  retry: 1,
+  keepPreviousData: true,
+  select: (data) => data.products,
 });
-
-// console.log(products.value[0]);
 </script>
 <template>
   <main class="flex-grow mb-[200px]">
@@ -90,14 +88,20 @@ const { data: products, isLoading } = useQuery({
         class="flex flex-wrap justify-center gap-x-32 gap-y-12 relative top-[450px]"
       >
         <!-- Product Card -->
-        <div class="product-cards-container">
+        <div class="p-8 flex justify-center">
           <!-- Loading State: Display three loading cards -->
-          <div v-if="isLoading" class="cards-grid">
+          <div
+            v-if="isLoading"
+            class="grid grid-cols-[repeat(3,minmax(300px,1fr))] gap-24 w-full max-w-[1200px]"
+          >
             <LoadingCards />
           </div>
 
           <!-- Data Loaded: Loop through products and display product card -->
-          <div v-else class="cards-grid">
+          <div
+            v-else
+            class="grid grid-cols-[repeat(3,minmax(300px,1fr))] gap-24 w-full max-w-[1200px]"
+          >
             <ProductCards :products="products" />
           </div>
         </div>
@@ -115,19 +119,5 @@ const { data: products, isLoading } = useQuery({
 <style scoped>
 .swiper {
   padding-bottom: 3rem;
-}
-
-.product-cards-container {
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
-}
-
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 1200px;
 }
 </style>
