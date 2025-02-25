@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router";
+import { useCartStore } from "../stores/cartStore.js";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const { products } = defineProps({
   products: {
@@ -8,9 +9,11 @@ const { products } = defineProps({
   },
 });
 const router = useRouter();
-
+const cartStore = useCartStore();
 const addToCart = (product) => {
   console.log("Product added to cart", product);
+
+  cartStore.addItem(product);
 };
 </script>
 <template>

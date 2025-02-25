@@ -17,7 +17,7 @@ console.log("Cart Store is", cartStore);
     ></div>
 
     <!-- Modal -->
-    <div class="fixed top-[80px] right-0 z-50">
+    <div class="fixed bottom-0 right-0 z-50">
       <section
         class="flex flex-col py-7 mb-0 max-w-full bg-white w-[417px] max-md:mb-2.5"
       >
