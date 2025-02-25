@@ -11,11 +11,11 @@ const categories = [
     <figure
       v-for="(category, index) in categories"
       :key="index"
-      class="w-[400px]"
+      class="w-[530px]"
     >
       <!-- Image Container -->
       <div
-        class="relative bg-neutral-900 rounded-lg overflow-hidden w-[400px] h-[400px]"
+        class="relative bg-neutral-900 rounded-lg overflow-hidden w-[530px] h-[600px]"
       >
         <img
           class="absolute inset-0 object-cover w-full h-full bg-gray-100"

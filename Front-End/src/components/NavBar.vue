@@ -1,4 +1,6 @@
 <script setup>
+import Logo from "../assets/img/logo.jpeg";
+import Account from "../assets/img/login.jpeg";
 import { computed } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
@@ -8,9 +10,9 @@ const route = useRoute();
 const btnText = computed(() =>
   route.path === "/login" ? "Register" : "Login"
 );
-const icon = computed(() =>
-  route.path === "/login" ? "pi pi-user-plus" : "pi pi-user"
-);
+// const icon = computed(() =>
+//   route.path === "/login" ? "pi pi-user-plus" : "pi pi-user"
+// );
 
 const goToLogin = () => {
   route.path === "/login" ? router.push("register") : router.push("login");
@@ -18,76 +20,89 @@ const goToLogin = () => {
 </script>
 
 <template>
-  <header class="sticky top-0 z-50 bg-gray-50 shadow-md">
-    <div
-      class="container mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between"
-    >
-      <!-- Logo -->
-      <div class="mb-4 md:mb-0">
-        <button
-          @click="router.push('/')"
-          class="text-3xl md:text-4xl font-bold text-black hover:cursor-pointer"
-        >
-          EcomNest
-        </button>
-      </div>
+  <header
+    class="px-16 py-8 w-full bg-white max-md:px-5 max-md:max-w-full fixed top-0 z-50 shadow-md"
+  >
+    <div class="flex gap-5 items-center justify-between max-md:flex-col">
+      <a
+        href="/"
+        class="flex items-center gap-1.5 text-4xl font-bold text-black max-md:mt-10"
+      >
+        <img
+          :src="Logo"
+          alt="Furniro logo"
+          class="object-contain w-[50px] aspect-[1.56]"
+        />
+        <span>Furniro</span>
+      </a>
 
-      <!-- Navigation -->
-      <nav class="mb-4 md:mb-0">
-        <ul class="flex space-x-12">
+      <nav class="max-md:mt-10">
+        <ul
+          class="flex gap-10 text-base font-medium text-black max-md:flex-col"
+        >
           <li>
-            <RouterLink
-              to="/"
-              class="text-lg text-gray-800 hover:text-orange-500 transition-colors"
+            <RouterLink to="/" class="hover:text-gray-600 transition-colors"
+              >Home</RouterLink
             >
-              Home
-            </RouterLink>
           </li>
           <li>
             <RouterLink
               to="/products"
-              class="text-lg text-gray-800 hover:text-orange-500 transition-colors"
+              class="hover:text-gray-600 transition-colors"
+              >Products</RouterLink
             >
-              All Products
-            </RouterLink>
           </li>
           <li>
             <RouterLink
               to="/about"
-              class="text-lg text-gray-800 hover:text-orange-500 transition-colors"
+              class="hover:text-gray-600 transition-colors"
+              >About</RouterLink
             >
-              About
-            </RouterLink>
           </li>
           <li>
             <RouterLink
               to="/contact"
-              class="text-lg text-gray-800 hover:text-orange-500 transition-colors"
+              class="hover:text-gray-600 transition-colors"
+              >Contact</RouterLink
             >
-              Contact
-            </RouterLink>
           </li>
         </ul>
       </nav>
 
-      <!-- Icons Section -->
-      <div class="flex items-center space-x-12">
-        <!-- Cart Icon with Badge -->
-        <div class="relative group-hover:cursor-pointer">
-          <i class="pi pi-shopping-cart text-2xl text-gray-800"></i>
-          <span
-            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full"
-          >
-            3
-          </span>
-        </div>
-        <!-- Login Button -->
+      <div class="flex gap-10 max-md:mt-10">
         <button
-          @click="goToLogin"
-          class="flex items-center gap-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+          aria-label="Account"
+          class="hover:opacity-80 transition-opacity"
         >
-          <i :class="`${icon} text-white text-lg`"></i>
-          <span>{{ btnText }}</span>
+          <img
+            :src="Account"
+            alt="Account"
+            class="object-contain w-7 aspect-square"
+          />
+        </button>
+        <button
+          aria-label="Search"
+          class="hover:opacity-80 transition-opacity flex items-center justify-center w-7 h-7"
+        >
+          <i class="pi pi-search text-black text-xl"></i>
+        </button>
+
+        <button
+          aria-label="Favorites"
+          class="hover:opacity-80 transition-opacity"
+        >
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/52cb9a1f112445149b6b31ac05588017/c56b48a84245ecd5d3b3da46991166817337450019eef839a7fedd87be6050dd?placeholderIfAbsent=true"
+            alt="Favorites icon"
+            class="object-contain w-7 aspect-square"
+          />
+        </button>
+        <button aria-label="Cart" class="hover:opacity-80 transition-opacity">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/52cb9a1f112445149b6b31ac05588017/125c5421587ebc7e847e7912b1da14a11e204697a4dfbd43ab84dd6c66fc3729?placeholderIfAbsent=true"
+            alt="Cart icon"
+            class="object-contain w-7 aspect-square"
+          />
         </button>
       </div>
     </div>

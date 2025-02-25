@@ -12,7 +12,7 @@ class ProductController extends Controller
     public function index()
     {
         // Fetch 9 products per page
-        $products = Product::paginate(9);
+        $products = Product::paginate(12);
 
         return response()->json([
             'message'      => 'Products fetched successfully',

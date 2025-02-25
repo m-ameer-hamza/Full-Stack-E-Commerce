@@ -37,7 +37,7 @@ function changePage(page) {
 }
 </script>
 <template>
-  <main class="flex-grow mb-[200px]">
+  <main class="flex-grow mb-28">
     <!-- Filter Section -->
     <div class="flex flex-col bg-orange-50 text-black w-full">
       <div
@@ -142,47 +142,37 @@ function changePage(page) {
     </div>
 
     <!-- Products -->
-    <div
-      class="flex flex-wrap max-w-screen-xl mx-auto justify-center gap-x-32 gap-y-12 relative top-10"
-    >
-      <!-- Product Card -->
-      <div class="p-8">
-        <div class="container mx-auto px-6">
-          <div
-            v-if="isLoading"
-            class="grid grid-cols-[repeat(3,minmax(400px,1fr))] gap-24"
-          >
-            <LoadingCards />
-          </div>
-          <div
-            v-else
-            class="grid grid-cols-[repeat(3,minmax(400px,1fr))] gap-24"
-          >
-            <ProductCards :products="products" />
-          </div>
-        </div>
+    <div class="max-w-[1520px] mx-auto relative top-4">
+      <!-- Product Cards -->
+      <div v-if="isLoading">
+        <LoadingCards />
+      </div>
+      <div v-else>
+        <ProductCards :products="products" />
       </div>
 
-      <!-- Pagination Buttons -->
-      <div
-        class="flex gap-10 items-start pt-8 text-xl text-black whitespace-nowrap"
-      >
+      <!-- Pagination Buttons Centered -->
+      <div class="flex justify-center pt-16">
         <div
-          v-for="page in lastPage"
-          :key="page"
-          class="flex flex-col rounded-xl w-[60px]"
+          class="flex gap-10 items-center text-xl text-black whitespace-nowrap"
         >
           <div
-            @click="changePage(page)"
-            :class="[
-              'px-1.5 rounded-xl h-[60px] w-[60px] flex items-center justify-center cursor-pointer',
-              page === currentPage ? 'bg-yellow-600' : 'bg-orange-50',
-            ]"
-            role="button"
-            tabindex="0"
-            :aria-label="'Step ' + page"
+            v-for="page in lastPage"
+            :key="page"
+            class="flex flex-col rounded-xl w-[60px]"
           >
-            {{ page }}
+            <button
+              @click="changePage(page)"
+              :class="[
+                'px-1.5 rounded-xl h-[60px] w-[60px] flex items-center justify-center cursor-pointer',
+                page === currentPage ? 'bg-yellow-600' : 'bg-orange-50',
+              ]"
+              role="button"
+              tabindex="0"
+              :aria-label="'Step ' + page"
+            >
+              {{ page }}
+            </button>
           </div>
         </div>
       </div>

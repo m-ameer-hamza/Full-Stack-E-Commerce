@@ -1,12 +1,18 @@
+<script setup>
+import QualityIcon from "../assets/quality.png";
+import WarrantyIcon from "../assets/warrenty.png";
+import ShippingIcon from "../assets/shipping.png";
+import SupportIcon from "../assets/support.png";
+</script>
 <template>
   <div class="flex flex-col justify-center items-center py-24 bg-orange-50">
     <div
-      class="flex flex-wrap gap-10 justify-between items-center max-w-full w-[1334px]"
+      class="flex flex-wrap gap-10 justify-between items-center max-w-full w-[1440px]"
     >
       <div class="flex gap-2.5 items-center self-stretch my-auto min-w-[240px]">
         <img
           loading="lazy"
-          src="/quality.png"
+          :src="QualityIcon"
           class="object-contain shrink-0 self-stretch my-auto aspect-square w-[60px]"
           alt="High Quality Icon"
         />
@@ -22,7 +28,7 @@
       >
         <img
           loading="lazy"
-          src="/warrenty.png"
+          :src="WarrantyIcon"
           class="object-contain shrink-0 self-stretch my-auto aspect-square w-[60px]"
           alt="Warranty Protection Icon"
         />
@@ -38,7 +44,7 @@
       >
         <img
           loading="lazy"
-          src="/shipping.png"
+          :src="ShippingIcon"
           class="object-contain shrink-0 self-stretch my-auto aspect-square w-[60px]"
           alt="Free Shipping Icon"
         />
@@ -50,7 +56,7 @@
       <div class="flex gap-2.5 items-center self-stretch my-auto min-w-[240px]">
         <img
           loading="lazy"
-          src="/support.png"
+          :src="SupportIcon"
           class="object-contain shrink-0 self-stretch my-auto aspect-square w-[60px]"
           alt="24/7 Support Icon"
         />

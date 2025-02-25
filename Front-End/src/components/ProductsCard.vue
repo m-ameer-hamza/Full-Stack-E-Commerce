@@ -10,24 +10,26 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-x-10 gap-y-10">
+  <div class="grid grid-cols-4 gap-x-12 gap-y-12">
     <article
       v-for="(product, index) in products"
       :key="product.id"
-      class="w-[285px] h-[446px] relative group cursor-pointer"
+      class="w-[380px] h-[580px] relative group cursor-pointer"
     >
       <!-- Product Image -->
       <figure>
         <img
           loading="lazy"
-          class="w-full h-[301px] object-cover rounded-t-lg"
+          class="w-full h-[427px] object-cover rounded-t-lg"
           :src="`${BASE_URL}${product.imagePath}`"
           alt="Syltherine – Stylish cafe chair"
         />
       </figure>
 
       <!-- Product Info -->
-      <div class="absolute bottom-0 left-0 w-full bg-gray-100 rounded-b-lg p-4">
+      <div
+        class="absolute h-[158px] bottom-0 left-0 w-full bg-gray-100 rounded-b-lg p-4"
+      >
         <h3 class="text-2xl font-semibold text-neutral-700 font-['Poppins']">
           {{ product.title }}
         </h3>

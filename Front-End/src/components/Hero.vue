@@ -1,6 +1,6 @@
 <script></script>
 <template>
-  <div class="flex flex-col text-black whitespace-nowrap">
+  <div class="flex flex-col text-black whitespace-nowrap mt-[104px]">
     <div
       class="flex relative flex-col justify-center items-center px-20 py-28 w-full max-h-[316px] max-md:px-5 max-md:pt-24 max-md:max-w-full"
     >

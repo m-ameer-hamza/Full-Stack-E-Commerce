@@ -4,7 +4,8 @@ import ProductCards from "../components/ProductsCard.vue";
 import LoadingCards from "../components/LoadingCards.vue";
 import productsAPI from "../../apis/productsAPI";
 import { useQuery } from "@tanstack/vue-query";
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 const { getFeaturedProducts } = productsAPI();
 const { data: products, isLoading } = useQuery({
   queryKey: ["featuredProducts"],
@@ -20,7 +21,7 @@ const { data: products, isLoading } = useQuery({
 <template>
   <main class="flex-grow mb-[200px]">
     <!-- Image with overlay card -->
-    <section class="relative h-[617px] w-full">
+    <section class="relative mt-3 h-[617px] w-full">
       <img
         loading="lazy"
         src="/Hero.png"
@@ -81,17 +82,16 @@ const { data: products, isLoading } = useQuery({
       </header>
 
       <!-- Products Cards -->
-      <div class="max-w-[1260px] mx-auto relative top-4">
+      <div class="max-w-[1634px] mx-auto relative top-4">
         <!-- Product Card -->
         <ProductCards :products="products" />
+        <button
+          @click="router.push('/products')"
+          class="w-[290px] h-[50px] mt-8 mx-auto relative cursor-pointer bg-white border border-yellow-600 transition duration-300 hover:bg-yellow-600 hover:border-yellow-600 text-yellow-600 hover:text-white text-lg font-semibold font-['Poppins'] flex items-center justify-center"
+        >
+          Show More
+        </button>
       </div>
-
-      <!-- Show More button -->
-      <!-- <button
-        class="top-[500px] relative px-24 py-3 mx-auto group flex items-center justify-center cursor-pointer bg-gradient-to-r from-yellow-500 to-yellow-600 border border-transparent transition-all duration-300 text-white text-2xl font-semibold font-['Poppins'] rounded-lg shadow-md hover:from-yellow-600 hover:to-yellow-500 hover:shadow-lg transform hover:scale-105"
-      >
-        Show More
-      </button> -->
     </section>
   </main>
 </template>
