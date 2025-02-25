@@ -1,14 +1,18 @@
 <script setup>
+import { useRouter } from "vue-router";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 const { products } = defineProps({
   products: {
     type: Array,
     required: true,
   },
 });
-console.log(products);
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-</script>
+const router = useRouter();
 
+const addToCart = (product) => {
+  console.log("Product added to cart", product);
+};
+</script>
 <template>
   <div class="grid grid-cols-4 gap-x-12 gap-y-12">
     <article
@@ -17,34 +21,38 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
       class="w-[380px] h-[580px] relative group cursor-pointer"
     >
       <!-- Product Image -->
-      <figure>
-        <img
-          loading="lazy"
-          class="w-full h-[427px] object-cover rounded-t-lg"
-          :src="`${BASE_URL}${product.imagePath}`"
-          alt="Syltherine – Stylish cafe chair"
-        />
-      </figure>
+      <div @click="router.push(`/product/${product.id}`)">
+        <figure>
+          <img
+            loading="lazy"
+            class="w-full h-[427px] object-cover rounded-t-lg"
+            :src="`${BASE_URL}${product.imagePath}`"
+            alt="Syltherine – Stylish cafe chair"
+          />
+        </figure>
 
-      <!-- Product Info -->
-      <div
-        class="absolute h-[158px] bottom-0 left-0 w-full bg-gray-100 rounded-b-lg p-4"
-      >
-        <h3 class="text-2xl font-semibold text-neutral-700 font-['Poppins']">
-          {{ product.title }}
-        </h3>
-        <p class="text-base text-zinc-500 font-medium font-['Poppins']">
-          {{ product.description }}
-        </p>
-        <div class="flex items-center gap-4 mt-2">
-          <span class="text-xl font-semibold text-neutral-700 font-['Poppins']">
-            $ {{ product.price }}
-          </span>
-          <span
-            class="text-base font-normal text-zinc-400 font-['Poppins'] line-through"
-          >
-            $ {{ parseFloat(product.price) + 50 }}
-          </span>
+        <!-- Product Info -->
+        <div
+          class="absolute h-[158px] bottom-0 left-0 w-full bg-gray-100 rounded-b-lg p-4"
+        >
+          <h3 class="text-2xl font-semibold text-neutral-700 font-['Poppins']">
+            {{ product.title }}
+          </h3>
+          <p class="text-base text-zinc-500 font-medium font-['Poppins']">
+            {{ product.description }}
+          </p>
+          <div class="flex items-center gap-4 mt-2">
+            <span
+              class="text-xl font-semibold text-neutral-700 font-['Poppins']"
+            >
+              $ {{ product.price }}
+            </span>
+            <span
+              class="text-base font-normal text-zinc-400 font-['Poppins'] line-through"
+            >
+              $ {{ parseFloat(product.price) + 50 }}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -55,6 +63,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
       <!-- Add to Cart Button -->
       <button
+        @click="addToCart(product)"
         class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition duration-300 bg-white text-yellow-600 py-3 px-12 rounded whitespace-nowrap text-lg font-semibold hover:cursor-pointer z-10"
       >
         Add to cart

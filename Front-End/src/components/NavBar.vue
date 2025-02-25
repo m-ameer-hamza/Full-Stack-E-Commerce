@@ -17,6 +17,12 @@ const btnText = computed(() =>
 const goToLogin = () => {
   route.path === "/login" ? router.push("register") : router.push("login");
 };
+
+const emit = defineEmits(["cart-click"]);
+
+const cartClick = () => {
+  emit("cart-click");
+};
 </script>
 
 <template>
@@ -97,12 +103,10 @@ const goToLogin = () => {
             class="object-contain w-7 aspect-square"
           />
         </button>
-        <button aria-label="Cart" class="hover:opacity-80 transition-opacity">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/52cb9a1f112445149b6b31ac05588017/125c5421587ebc7e847e7912b1da14a11e204697a4dfbd43ab84dd6c66fc3729?placeholderIfAbsent=true"
-            alt="Cart icon"
-            class="object-contain w-7 aspect-square"
-          />
+        <button @click="cartClick" class="hover:opacity-80 transition-opacity">
+          <i
+            class="pi pi-shopping-cart text-2xl object-contain w-7 aspect-square"
+          ></i>
         </button>
       </div>
     </div>

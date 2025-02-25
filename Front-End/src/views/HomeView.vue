@@ -43,6 +43,7 @@ const { data: products, isLoading } = useQuery({
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
         <button
+          @click="router.push('/products')"
           class="mt-2 hover:bg-yellow-700 hover:cursor-pointer self-start px-16 py-4 bg-yellow-600 border border-yellow-600 text-white text-lg font-bold uppercase rounded"
         >
           BUY NOW
