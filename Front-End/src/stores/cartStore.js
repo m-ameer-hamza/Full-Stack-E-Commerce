@@ -4,6 +4,13 @@ export const useCartStore = defineStore("cart", {
   state: () => ({
     cart: [],
   }),
+  getters: {
+    totalPrice: (state) => {
+      return state.cart.reduce((acc, item) => {
+        return acc + item.price * item.quantity;
+      }, 0);
+    },
+  },
   actions: {
     addItem(product) {
       const existingProduct = this.cart.find((item) => {
@@ -13,6 +20,16 @@ export const useCartStore = defineStore("cart", {
         existingProduct.quantity++;
       } else {
         this.cart.push({ ...product, quantity: 1 });
+      }
+    },
+    addMultipleQuantaties(products, quantity) {
+      const existingProduct = this.cart.find((item) => {
+        return item.id === products.id;
+      });
+      if (existingProduct) {
+        existingProduct.quantity += quantity;
+      } else {
+        this.cart.push({ ...products, quantity: quantity });
       }
     },
     removeItem(id) {

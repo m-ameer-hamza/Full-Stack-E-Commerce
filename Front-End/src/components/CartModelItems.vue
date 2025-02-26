@@ -1,0 +1,77 @@
+<script setup>
+import { useCartStore } from "@/stores/cartStore";
+
+const cartStore = useCartStore();
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+</script>
+<template>
+  <div
+    v-for="item in cartStore.cart"
+    :key="item.id"
+    class="flex gap-5 self-stretch mt-11 max-md:mt-10"
+  >
+    <!-- Left: Product Image -->
+    <div>
+      <img
+        :src="`${BASE_URL}${item.imagePath}`"
+        :alt="item.title"
+        class="object-contain rounded-none aspect-[1.03] w-[108px]"
+      />
+    </div>
+
+    <!-- Right: Product details -->
+    <!-- Added pr-16 to reserve space for the remove button -->
+    <div class="my-auto text-black relative pr-16">
+      <div class="flex gap-5 justify-between items-start">
+        <div class="flex flex-col">
+          <!-- Apply truncate so long titles are trimmed with an ellipsis -->
+          <p class="self-start text-lg font-medium truncate">
+            {{ item.title }}
+          </p>
+          <div class="flex gap-4 items-center mt-2 text-xs font-light">
+            <span class="self-stretch text-base">{{ item.quantity }}</span>
+            <span class="self-stretch my-auto">X</span>
+            <span
+              class="self-stretch my-auto text-lg font-medium text-yellow-600"
+            >
+              $ {{ item.price }}
+            </span>
+          </div>
+          <!-- Quantity Controller -->
+          <div
+            class="flex items-center justify-center w-28 h-9 divide-x divide-neutral-400 px-2 py-1 text-sm whitespace-nowrap bg-white rounded-md border border-neutral-400 mt-2"
+            role="group"
+            aria-label="Quantity selector"
+          >
+            <button
+              @click="item.quantity > 1 ? item.quantity-- : null"
+              class="w-1/3 text-xl font-semibold"
+              aria-label="Decrease quantity"
+            >
+              -
+            </button>
+            <span class="w-1/3 font-semibold text-center">
+              {{ item.quantity }}
+            </span>
+            <button
+              @click="item.quantity++"
+              class="w-1/3 text-xl font-semibold text-center"
+              aria-label="Increase quantity"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Remove Button remains absolutely positioned -->
+    <div class="absolute right-5">
+      <button class="flex items-center justify-center" aria-label="Remove item">
+        <i
+          class="text-white pi pi-times-circle text-2xl bg-gray-500 hover:bg-red-600 rounded-full mt-2"
+        ></i>
+      </button>
+    </div>
+  </div>
+</template>

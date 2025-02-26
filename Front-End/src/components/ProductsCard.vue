@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { useCartStore } from "../stores/cartStore.js";
+import { useToast } from "vue-toastification";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const { products } = defineProps({
   products: {
@@ -10,16 +11,17 @@ const { products } = defineProps({
 });
 const router = useRouter();
 const cartStore = useCartStore();
-const addToCart = (product) => {
-  console.log("Product added to cart", product);
+const toast = useToast();
 
+const addToCart = (product) => {
   cartStore.addItem(product);
+  toast.success("Product added to cart");
 };
 </script>
 <template>
   <div class="grid grid-cols-4 gap-x-12 gap-y-12">
     <article
-      v-for="(product, index) in products"
+      v-for="product in products"
       :key="product.id"
       class="w-[380px] h-[580px] relative group cursor-pointer"
     >

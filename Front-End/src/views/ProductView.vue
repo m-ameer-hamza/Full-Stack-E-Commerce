@@ -2,18 +2,20 @@
 import TrackBar from "../components/TrackBar.vue";
 import Banner from "../components/Banner.vue";
 import Footer from "../components/Footer.vue";
-import productsAPI from "../../apis/productsAPI.js";
 import { useQuery } from "@tanstack/vue-query";
 import { useRoute } from "vue-router";
 import { ref } from "vue";
+import productsAPI from "../../apis/productsAPI.js";
+import { useCartStore } from "@/stores/cartStore";
+import { useToast } from "vue-toastification";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-//get id from the url
 const route = useRoute();
+const cartStore = useCartStore();
+const toast = useToast();
 const { getProduct } = productsAPI();
 const productId = ref(route.params.id);
-
-console.log("Product ID is: ", productId.value);
+const quantity = ref(1);
 
 const { data: product, isLoading } = useQuery({
   queryKey: ["Product", productId],
@@ -26,7 +28,11 @@ const { data: product, isLoading } = useQuery({
   select: (data) => data.product,
 });
 
-console.log("Single Product is: ", product);
+//cart handling
+const addToCart = (product) => {
+  cartStore.addMultipleQuantaties(product, quantity.value);
+  toast.success("Product Added to Cart");
+};
 </script>
 <template>
   <main>
@@ -127,15 +133,17 @@ console.log("Single Product is: ", product);
                     aria-label="Quantity selector"
                   >
                     <button
+                      @click="quantity > 1 ? quantity-- : null"
                       class="text-3xl font-semibold"
                       aria-label="Decrease quantity"
                     >
                       -
                     </button>
-                    <span class="text-3xl font-semibold" aria-live="polite"
-                      >1</span
-                    >
+                    <span class="text-3xl font-semibold" aria-live="polite">{{
+                      quantity
+                    }}</span>
                     <button
+                      @click="quantity++"
                       class="text-2xl font-semibold"
                       aria-label="Increase quantity"
                     >
@@ -143,6 +151,7 @@ console.log("Single Product is: ", product);
                     </button>
                   </div>
                   <button
+                    @click="addToCart(product)"
                     class="px-12 py-4 text-xl rounded-2xl border border-black hover:bg-yellow-600 transition duration-300 ease-in-out hover:text-white max-md:px-5"
                   >
                     Add To Cart
