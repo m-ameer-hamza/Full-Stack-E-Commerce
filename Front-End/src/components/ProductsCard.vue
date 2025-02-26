@@ -55,7 +55,7 @@ const addToCart = (product) => {
             <span
               class="text-base font-normal text-zinc-400 font-['Poppins'] line-through"
             >
-              $ {{ parseFloat(product.price) + 50 }}
+              $ {{ (parseFloat(product.price) + 50).toFixed(2) }}
             </span>
           </div>
         </div>

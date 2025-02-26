@@ -7,6 +7,16 @@ const closeCart = () => {
   emit("cart-close");
 };
 
+const goToCart = () => {
+  router.push("/cart");
+  closeCart();
+};
+
+const goToCheckout = () => {
+  router.push("/checkout");
+  closeCart();
+};
+
 const cartStore = useCartStore();
 const router = useRouter();
 </script>
@@ -29,20 +39,19 @@ const router = useRouter();
             class="shrink-0 mt-6 max-w-full h-px border border-solid border-zinc-300 w-[287px]"
           />
 
-          <div class="flex flex-col gap-3 max-h-[600px] overflow-y-auto">
-            <div class="flex flex-col gap-3 max-h-[600px] overflow-y-auto">
-              <template v-if="cartStore.cart.length === 0">
-                <div class="h-[200px] flex items-center justify-center">
-                  <p class="text-lg font-medium text-center">
-                    Your cart is empty.
-                  </p>
-                </div>
-              </template>
-              <template v-else>
-                <CartModelItems />
-              </template>
-            </div>
+          <div class="flex flex-col gap-3 max-h-[520px] overflow-y-auto">
+            <template v-if="cartStore.cart.length === 0">
+              <div class="h-[200px] flex items-center justify-center">
+                <p class="text-lg font-medium text-center">
+                  Your cart is empty.
+                </p>
+              </div>
+            </template>
+            <template v-else>
+              <CartModelItems />
+            </template>
           </div>
+
           <div
             class="flex gap-5 justify-between mt-20 max-w-full text-base w-[286px] max-md:mt-10"
           >
@@ -59,12 +68,13 @@ const router = useRouter();
           class="flex gap-3.5 items-start self-center mt-7 text-xs text-black whitespace-nowrap"
         >
           <button
-            @click="router.push('/cart')"
+            @click="goToCart()"
             class="gap-2.5 px-8 py-1.5 border border-black border-solid rounded-[50px] max-md:px-5"
           >
             Cart
           </button>
           <button
+            @click="goToCheckout()"
             class="gap-2.5 px-8 py-1.5 border border-black border-solid rounded-[50px] max-md:px-5"
           >
             Checkout
