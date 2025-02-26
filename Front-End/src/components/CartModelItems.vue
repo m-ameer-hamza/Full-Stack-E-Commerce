@@ -9,7 +9,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
   <div
     v-for="item in cartStore.cart"
     :key="item.id"
-    class="flex gap-5 self-stretch mt-11 max-md:mt-10"
+    class="relative flex gap-5 w-[410px] self-stretch mt-11 max-md:mt-10"
   >
     <!-- Left: Product Image -->
     <div>
@@ -20,15 +20,15 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
       />
     </div>
 
-    <!-- Right: Product details -->
-    <!-- Added pr-16 to reserve space for the remove button -->
+    <!-- Right: Product details (with reserved right padding) -->
     <div class="my-auto text-black relative pr-16">
       <div class="flex gap-5 justify-between items-start">
         <div class="flex flex-col">
-          <!-- Apply truncate so long titles are trimmed with an ellipsis -->
-          <p class="self-start text-lg font-medium truncate">
-            {{ item.title }}
-          </p>
+          <div class="flex flex-row">
+            <p class="self-start text-lg font-medium truncate">
+              {{ item.title }}
+            </p>
+          </div>
           <div class="flex gap-4 items-center mt-2 text-xs font-light">
             <span class="self-stretch text-base">{{ item.quantity }}</span>
             <span class="self-stretch my-auto">X</span>
@@ -65,8 +65,8 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
         </div>
       </div>
     </div>
-    <!-- Remove Button remains absolutely positioned -->
-    <div class="absolute right-5">
+    <!-- Remove Button (absolutely positioned relative to the item's container) -->
+    <div class="absolute right-0">
       <button class="flex items-center justify-center" aria-label="Remove item">
         <i
           class="text-white pi pi-times-circle text-2xl bg-gray-500 hover:bg-red-600 rounded-full mt-2"
