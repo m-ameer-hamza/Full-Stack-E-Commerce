@@ -28,6 +28,9 @@ watch(
     if (newPath === "/products") {
       heroTitle.value = "All Products";
     }
+    if (newPath === "/cart") {
+      heroTitle.value = "Cart";
+    }
   }
 );
 

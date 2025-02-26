@@ -1,12 +1,14 @@
 <script setup>
 import CartModelItems from "./CartModelItems.vue";
 import { useCartStore } from "@/stores/cartStore";
+import { useRouter } from "vue-router";
 const emit = defineEmits(["cart-close"]);
 const closeCart = () => {
   emit("cart-close");
 };
 
 const cartStore = useCartStore();
+const router = useRouter();
 </script>
 <template>
   <div>
@@ -57,6 +59,7 @@ const cartStore = useCartStore();
           class="flex gap-3.5 items-start self-center mt-7 text-xs text-black whitespace-nowrap"
         >
           <button
+            @click="router.push('/cart')"
             class="gap-2.5 px-8 py-1.5 border border-black border-solid rounded-[50px] max-md:px-5"
           >
             Cart
