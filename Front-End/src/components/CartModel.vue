@@ -41,15 +41,14 @@ const cartStore = useCartStore();
               </template>
             </div>
           </div>
-
-          <!-- <div
-            class="flex gap-5 justify-between mt-64 max-w-full text-base w-[286px] max-md:mt-10"
+          <div
+            class="flex gap-5 justify-between mt-20 max-w-full text-base w-[286px] max-md:mt-10"
           >
             <p class="text-black">Subtotal</p>
             <p class="font-semibold text-yellow-600">
-              $ {{ cartStore.totalPrice }}
+              $ {{ cartStore.totalPrice.toFixed(2) }}
             </p>
-          </div> -->
+          </div>
         </div>
 
         <hr class="shrink-0 mt-6 h-px border border-solid border-zinc-300" />

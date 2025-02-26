@@ -1,9 +1,14 @@
 <script setup>
 import { useCartStore } from "@/stores/cartStore";
-
 const cartStore = useCartStore();
-
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+const updateQuantity = (id, quantity) => {
+  cartStore.updateQuantity(id, quantity);
+};
+const deleteItem = (id) => {
+  cartStore.deleteItem(id);
+};
 </script>
 <template>
   <div
@@ -42,24 +47,34 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
           <div
             class="flex items-center justify-center w-28 h-9 divide-x divide-neutral-400 px-2 py-1 text-sm whitespace-nowrap bg-white rounded-md border border-neutral-400 mt-2"
             role="group"
-            aria-label="Quantity selector"
+            label="Quantity selector"
           >
             <button
-              @click="item.quantity > 1 ? item.quantity-- : null"
-              class="w-1/3 text-xl font-semibold"
-              aria-label="Decrease quantity"
+              v-if="item.quantity === 1"
+              @click="deleteItem(item.id)"
+              class="w-1/3 flex items-center justify-center"
+              label="Decrease quantity"
             >
-              -
+              <i class="pi pi-trash"></i>
             </button>
-            <span class="w-1/3 font-semibold text-center">
+
+            <button
+              v-if="item.quantity > 1"
+              @click="updateQuantity(item.id, item.quantity--)"
+              class="w-1/3 flex items-center justify-center"
+              label="Decrease quantity"
+            >
+              <i class="pi pi-minus"></i>
+            </button>
+            <span class="w-1/3 font-semibold text-lg text-center">
               {{ item.quantity }}
             </span>
             <button
-              @click="item.quantity++"
-              class="w-1/3 text-xl font-semibold text-center"
-              aria-label="Increase quantity"
+              @click="updateQuantity(item.id, item.quantity++)"
+              class="w-1/3 flex items-center justify-center"
+              label="Increase quantity"
             >
-              +
+              <i class="pi pi-plus"></i>
             </button>
           </div>
         </div>
@@ -67,7 +82,11 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
     </div>
     <!-- Remove Button (absolutely positioned relative to the item's container) -->
     <div class="absolute right-0">
-      <button class="flex items-center justify-center" aria-label="Remove item">
+      <button
+        @click="deleteItem(item.id)"
+        class="flex items-center justify-center"
+        aria-label="Remove item"
+      >
         <i
           class="text-white pi pi-times-circle text-2xl bg-gray-500 hover:bg-red-600 rounded-full mt-2"
         ></i>
