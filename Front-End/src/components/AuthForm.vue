@@ -102,8 +102,9 @@ const loginMutation = useMutation({
   onSuccess: (data) => {
     toast.success("Login Successful");
     userStore.setUser({
-      email: data.user.email,
       name: data.user.name,
+      email: data.user.email,
+      token: data.token,
       isAuthenticated: true,
     });
     router.push("/");

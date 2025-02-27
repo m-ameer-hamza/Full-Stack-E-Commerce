@@ -10,6 +10,11 @@ class Order extends Model
         'total',
         'user_id',
         'status',
+        'billing_name',
+        'billing_email',
+        'billing_address',
+        'payment_status',
+
     ];
 
     public function user()

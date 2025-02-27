@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('products', function (Blueprint $table) {
-    $table->id();
-    $table->string('title');
-    $table->text('description');
-    $table->decimal('price', 10, 2);
-    $table->enum('category', ['electronics','mobile','accessories','grocery', 'clothing', 'appliances']);
-    $table->string('image')->nullable();
-    $table->boolean('isFeatured')->default(false);
-    $table->timestamps();
-});
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description');
+            $table->decimal('price', 10, 2);
+            $table->enum('category', ['electronics', 'mobile', 'accessories', 'grocery', 'clothing', 'appliances']);
+            $table->string('image')->nullable();
+            $table->boolean('isFeatured')->default(false);
+            $table->timestamps();
+        });
 
     }
 

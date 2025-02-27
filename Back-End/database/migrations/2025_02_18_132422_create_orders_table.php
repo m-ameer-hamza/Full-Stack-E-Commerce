@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('billing_name');
+            $table->string('billing_email');
+            $table->string('billing_address')->nullable();
             $table->decimal('total', 10, 2)->default(0);
+            $table->enum('payment_status', ['Succeeded', 'Incomplete', 'Failed'])->default('Incomplete');
             $table->enum('status', ['pending', 'completed'])->default('pending');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();

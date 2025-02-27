@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +20,14 @@ Route::controller(ProductController::class)->group(function () {
 });
 
 Route::resource('orders', OrderController::class)->middleware('auth:sanctum')->except(['create', 'edit']);
+
+// Payment routes
+// Route::post('create-checkout-session', 'PaymentController@createCheckoutSession')->middleware('auth:sanctum');
+Route::post('/create-checkout-session', [PaymentController::class, 'createCheckoutSession']);
+Route::post('/stripe-webhook', [PaymentController::class, 'handleWebhook']);
+
+Route::controller(PaymentController::class)->group(function () {
+    Route::post('create-checkout-session', 'createCheckoutSession')->middleware('auth:sanctum');
+    Route::post('stripe-webhook', 'handleWebhook');
+});
+

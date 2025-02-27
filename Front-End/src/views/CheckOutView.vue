@@ -271,12 +271,4 @@
       ></textarea>
     </div>
   </form>
-
-  <script>
-    document.querySelector("form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      // Handle form submission
-      console.log("Form submitted");
-    });
-  </script>
 </template>

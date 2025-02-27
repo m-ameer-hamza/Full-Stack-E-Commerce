@@ -1,18 +1,17 @@
 <script setup>
 import Logo from "../assets/img/logo.jpeg";
 import Account from "../assets/img/login.jpeg";
-import { computed } from "vue";
+import { computed, watchEffect } from "vue";
+import { useUserStore } from "../stores/userStore";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();
+const userStore = useUserStore();
 
-const btnText = computed(() =>
-  route.path === "/login" ? "Register" : "Login"
+const icon = computed(() =>
+  route.path === "/login" ? "pi-user-plus" : "pi-user"
 );
-// const icon = computed(() =>
-//   route.path === "/login" ? "pi pi-user-plus" : "pi pi-user"
-// );
 
 const goToLogin = () => {
   route.path === "/login" ? router.push("register") : router.push("login");
@@ -23,6 +22,10 @@ const emit = defineEmits(["cart-click"]);
 const cartClick = () => {
   emit("cart-click");
 };
+
+watchEffect(() => {
+  console.log("UserStore", userStore.isAuthenticated);
+});
 </script>
 
 <template>
@@ -76,7 +79,9 @@ const cartClick = () => {
       </nav>
 
       <div class="flex gap-10 max-md:mt-10">
-        <button
+        <RouterLink
+          to="/login"
+          v-if="!userStore.isAuthenticated"
           aria-label="Account"
           class="hover:opacity-80 transition-opacity"
         >
@@ -85,6 +90,13 @@ const cartClick = () => {
             alt="Account"
             class="object-contain w-7 aspect-square"
           />
+        </RouterLink>
+        <button
+          v-else
+          aria-label="user"
+          class="hover:opacity-80 transition-opacity mt-[4px]"
+        >
+          <i :class="`pi ${icon} text-xl text-black`"></i>
         </button>
         <button
           aria-label="Search"

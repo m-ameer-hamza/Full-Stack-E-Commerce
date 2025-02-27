@@ -15,12 +15,12 @@ class ProductController extends Controller
         $products = Product::paginate(12);
 
         return response()->json([
-            'message'      => 'Products fetched successfully',
-            'products'     => ProductResourse::collection($products),
+            'message' => 'Products fetched successfully',
+            'products' => ProductResourse::collection($products),
             'current_page' => $products->currentPage(),
-            'last_page'    => $products->lastPage(),
-            'total'        => $products->total(),
-            'per_page'     => $products->perPage(),
+            'last_page' => $products->lastPage(),
+            'total' => $products->total(),
+            'per_page' => $products->perPage(),
         ], 200);
     }
 
@@ -35,9 +35,10 @@ class ProductController extends Controller
             'products' => ProductResourse::collection($products),
         ], 200);
     }
+
     public function getByCategory($category)
     {
-        if (!in_array($category, ['electronics', 'appliances', 'clothing', 'grocery'])) {
+        if (! in_array($category, ['electronics', 'appliances', 'clothing', 'grocery'])) {
             return response()->json([
                 'message' => 'Invalid category',
             ], 400);
@@ -65,7 +66,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-        if (!$product) {
+        if (! $product) {
             return response()->json([
                 'message' => 'Product not found',
             ], 404);
@@ -80,7 +81,7 @@ class ProductController extends Controller
     {
         $updatedInfo = $request->validated();
         $product = Product::find($id);
-        if (!$product) {
+        if (! $product) {
             return response()->json([
                 'message' => 'Product not found',
             ], 404);
@@ -97,7 +98,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
-        if (!$product) {
+        if (! $product) {
             return response()->json([
                 'message' => 'Product not found',
             ], 404);

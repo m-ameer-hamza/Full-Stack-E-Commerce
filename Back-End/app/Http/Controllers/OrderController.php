@@ -7,6 +7,7 @@ use App\Http\Resources\OrderResourse;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Services\OrderCreator;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -25,35 +26,29 @@ class OrderController extends Controller
         ]);
     }
 
-    public function store(OrderItemRequest $request) // change name
+    public function store(OrderItemRequest $request)
     {
         $userId = Auth::id();
-        $order = Order::create(['user_id' => $userId]);
 
-        $totalAmount = 0;
-        foreach ($request->items as $item) {  //create a service for this named: OrderItemsCreator
-            $product = Product::find($item['product_id']);
-            if (!$product) {
-                return response()->json(['message' => 'Product not found'], 404);
-            }
+        // Prepare billing data from the request.
+        $billingData = [
+            'billing_name' => $request->billing_name,
+            'billing_email' => $request->billing_email,
+            'billing_address' => $request->billing_address,
+        ];
 
-            $amount = $product->price * $item['quantity'];
+        // Assume $request->items contains the order items array.
+        $orderItems = $request->items;
+        $totalAmount = (float) ($request->total);
 
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $product->id,
-                'quantity' => $item['quantity'],
-                'amount' => $amount,
-            ]);
-            $totalAmount += $amount;
-        }
+        // Create an instance of the OrderCreator service.
+        $orderCreator = new OrderCreator;
 
-        $order->update([
-            'total' => $totalAmount,
-        ]);
+        // Create the order.
+        $order = $orderCreator->createOrder($billingData, $orderItems, $userId, $totalAmount);
 
         return response()->json([
-            'message' => 'order placed successfully',
+            'message' => 'Order placed successfully',
             'order' => new OrderResourse($order),
         ], 201);
     }
@@ -61,7 +56,7 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::find($id); // lazy load -> :with
-        if (!$order) {
+        if (! $order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
 
@@ -73,7 +68,7 @@ class OrderController extends Controller
     public function update(OrderItemRequest $request, $id)
     {
         $order = Order::find($id);
-        if (!$order) {
+        if (! $order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
 
@@ -108,7 +103,7 @@ class OrderController extends Controller
     public function destroy($id)
     {
         $order = Order::find($id);
-        if (!$order) {
+        if (! $order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
         $order->delete();

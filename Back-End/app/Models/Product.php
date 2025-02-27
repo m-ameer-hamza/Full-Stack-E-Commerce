@@ -20,8 +20,8 @@ class Product extends Model
         'isFeatured',
     ];
 
-    public function getLocalImagePathAttribute ()
+    public function getLocalImagePathAttribute()
     {
-        return '/storage/images/products/' . $this->image . '.jpeg';
+        return '/storage/images/products/'.$this->image.'.jpeg';
     }
 }

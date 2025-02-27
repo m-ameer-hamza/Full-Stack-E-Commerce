@@ -33,13 +33,12 @@ class AuthController extends Controller
             ], 401);
         }
         $token = $user->createToken('authToken')->plainTextToken;
-        $cookie = cookie('authToken', $token, 60 * 24, '/', null, false, true);
 
         return response()->json([
             'message' => 'User logged in successfully',
             'user' => new UserResource($user),
-            'token' => $token,          // confirm this cookie-based or send token in response
-        ], 200)->cookie($cookie);
+            'token' => $token,          
+        ], 200);
     }
 
     public function logout(Request $request)
