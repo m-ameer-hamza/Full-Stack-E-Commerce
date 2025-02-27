@@ -16,7 +16,7 @@ class OrderCreator
      * @param  int|null  $userId  Optional user ID
      * @return \App\Models\Order
      */
-    public function createOrder(array $billingData, array $orderItems, $userId, $totalAmount)
+    public function call(array $billingData, array $orderItems, $userId, $totalAmount)
     {
         // Create the order record. 'total' can be updated later.
         $order = Order::create(array_merge([
@@ -24,16 +24,12 @@ class OrderCreator
             'total' => 0,  // initial total
         ], $billingData));
 
-        // Process each order item.
         foreach ($orderItems as $item) {
-            // Find the product; you can add error handling if product is not found.
             $product = Product::find($item['product_id']);
-            if (! $product) {
-                // Optionally, you could throw an exception or skip the item.
+            if (!$product) {
                 continue;
             }
             $amount = $product->price * $item['quantity'];
-            // Create an OrderItem record.
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $product->id,
@@ -42,7 +38,7 @@ class OrderCreator
             ]);
         }
 
-        // Update the order with the calculated total.
+
         $order->update(['total' => $totalAmount]);
 
         return $order;

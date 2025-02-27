@@ -53,7 +53,7 @@ class PaymentController extends Controller
             'line_items' => $lineItems,
             'mode' => 'payment',
             'success_url' => 'http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => url('/payment-cancel'),
+            'cancel_url' => 'http://localhost:5173/payment-cancelled',
             'metadata' => [
                 'order_items' => json_encode($metadataItems),
                 'amount' => intval($request->amount * 100), // store amount in cents
@@ -95,7 +95,7 @@ class PaymentController extends Controller
 
             // OrderCreator service.
             $orderCreator = new OrderCreator;
-            $order = $orderCreator->createOrder($billingData, $orderItems, $userId, $amount);
+            $order = $orderCreator->call($billingData, $orderItems, $userId, $amount);
 
             return response()->json([
                 'message' => 'Order created successfully',

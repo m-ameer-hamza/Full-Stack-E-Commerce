@@ -24,5 +24,5 @@ Route::resource('orders', OrderController::class)->middleware('auth:sanctum')->e
 // Payment routes
 Route::controller(PaymentController::class)->group(function () {
     Route::post('/paymentIntent', 'createCheckoutSession')->middleware('auth:sanctum');
-    Route::post('/completeOrder', 'completeOrder')->middleware('auth:sanctum');
+    Route::post('/storeCheckout', 'completeOrder')->middleware('auth:sanctum');
 });

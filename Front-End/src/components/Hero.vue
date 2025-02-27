@@ -1,4 +1,4 @@
-<script></script>
+<script setup></script>
 <template>
   <div class="flex flex-col text-black whitespace-nowrap mt-[104px]">
     <div

@@ -14,7 +14,6 @@ class OrderController extends Controller
 {
     public function index()
     {
-        // returns all orders of a specific user only using the id from token
         $userId = Auth::id();
         $orders = Order::where('user_id', $userId)->get();
         if ($orders->isEmpty()) {
@@ -29,23 +28,17 @@ class OrderController extends Controller
     public function store(OrderItemRequest $request)
     {
         $userId = Auth::id();
-
-        // Prepare billing data from the request.
         $billingData = [
             'billing_name' => $request->billing_name,
             'billing_email' => $request->billing_email,
             'billing_address' => $request->billing_address,
         ];
 
-        // Assume $request->items contains the order items array.
         $orderItems = $request->items;
         $totalAmount = (float) ($request->total);
 
-        // Create an instance of the OrderCreator service.
         $orderCreator = new OrderCreator;
-
-        // Create the order.
-        $order = $orderCreator->createOrder($billingData, $orderItems, $userId, $totalAmount);
+        $order = $orderCreator->call($billingData, $orderItems, $userId, $totalAmount);
 
         return response()->json([
             'message' => 'Order placed successfully',
