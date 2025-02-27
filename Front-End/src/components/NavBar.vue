@@ -1,7 +1,7 @@
 <script setup>
 import Logo from "../assets/img/logo.jpeg";
 import Account from "../assets/img/login.jpeg";
-import { computed, watchEffect } from "vue";
+import { computed } from "vue";
 import { useUserStore } from "../stores/userStore";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
@@ -22,10 +22,6 @@ const emit = defineEmits(["cart-click"]);
 const cartClick = () => {
   emit("cart-click");
 };
-
-watchEffect(() => {
-  console.log("UserStore", userStore.isAuthenticated);
-});
 </script>
 
 <template>

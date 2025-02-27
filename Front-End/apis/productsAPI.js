@@ -12,7 +12,6 @@ export default function productsAPI() {
   };
 
   const getProduct = async (id) => {
-    console.log("Calling the get Product API");
     const response = await api.get(`/products/${id}`);
     return response.data;
   };

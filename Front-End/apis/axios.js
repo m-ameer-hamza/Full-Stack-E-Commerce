@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useToast } from "vue-toastification";
+import { useUserStore } from "@/stores/userStore";
 
 const toast = useToast();
 
@@ -13,7 +14,11 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // You can add headers here if needed
+    const userStore = useUserStore();
+    const token = userStore?.token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -22,9 +27,7 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     console.log("error from response interceptor", error);
     const status = error.response?.status;

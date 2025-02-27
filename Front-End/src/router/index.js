@@ -6,6 +6,7 @@ import ProductsView from "@/views/ProductsView.vue";
 import ProductView from "@/views/ProductView.vue";
 import CartView from "@/views/CartView.vue";
 import CheckOutView from "@/views/CheckOutView.vue";
+import PaymentSuccess from "@/views/PaymentSuccess.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -43,6 +44,11 @@ const router = createRouter({
       path: "/checkout",
       name: "checkout",
       component: CheckOutView,
+    },
+    {
+      path: "/payment-success",
+      name: "PaymentSuccess",
+      component: PaymentSuccess,
     },
   ],
 });

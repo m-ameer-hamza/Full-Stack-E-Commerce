@@ -13,74 +13,131 @@ class PaymentController extends Controller
 {
     public function createCheckoutSession(Request $request)
     {
-        // Validate incoming request (if needed)
-        $validated = $request->validate([
-            'amount' => 'required|integer', // Amount in cents
+
+         $request->validate([
+            'amount' => 'required|numeric',
+            'items' => 'required|array',
         ]);
 
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        // Create a Checkout session
-        $session = Session::create([
-            'payment_method_types' => ['card'],
-            'billing_address_collection' => 'required',
-            'line_items' => [[
+        $lineItems = [];
+        $metadataItems = [];
+
+        foreach ($request->items as $item) {
+            // dollars to cents
+            $priceInCents = intval($item['price'] * 100);
+
+            //  line item for the Stripe Checkout
+            $lineItems[] = [
                 'price_data' => [
                     'currency' => 'usd',
                     'product_data' => [
-                        'name' => 'Your Product Name',
+                        'name' => $item['title'],
                     ],
-                    'unit_amount' => $request->amount, // amount in cents
+                    'unit_amount' => $priceInCents, // Price in cents
                 ],
-                'quantity' => 1,
-            ]],
+                'quantity' => $item['quantity'],
+            ];
+
+            $metadataItems[] = [
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+            ];
+        }
+
+        $session = Session::create([
+            'payment_method_types' => ['card'],
+            'billing_address_collection' => 'required',
+            'phone_number_collection' => ['enabled' => true],
+            'line_items' => $lineItems,
             'mode' => 'payment',
-            'success_url' => url('/payment-success?session_id={CHECKOUT_SESSION_ID}'),
+            'success_url' => 'http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => url('/payment-cancel'),
             'metadata' => [
-                'order_items' => json_encode($request->items),
-                'amount' => (string) $request->amount,
+                'order_items' => json_encode($metadataItems),
+                'amount' => intval($request->amount * 100), // store amount in cents
                 'user_id' => Auth::id(),
             ],
-
         ]);
 
-        // Return the session URL for redirection from the Vue app
         return response()->json(['url' => $session->url]);
     }
 
-    public function handleWebhook(Request $request)
+    public function completeOrder(Request $request)
     {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $sessionId = $request->input('session_id');
+        if (! $sessionId) {
+            return response()->json(['error' => 'Session ID is required'], 400);
+        }
 
-        $event = $request->all();
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        if ($event['type'] === 'checkout.session.completed') {
-            $session = $event['data']['object'];
+        try {
+            $session = \Stripe\Checkout\Session::retrieve($sessionId);
 
-            // Retrieve customer details from Stripe.
-            $customer = Customer::retrieve($session['customer']);
-            // Decode order items from metadata.
-            $orderItems = json_decode($session['metadata']['order_items'], true);
-            $amount = (float) $session['metadata']['amount'];
-            $userId = $session['metadata']['user_id'];
+            if (! empty($session->customer)) {
+                $customer = \Stripe\Customer::retrieve($session->customer);
+            } else {
 
-            // Prepare billing data. Adjust keys as per your Order table columns.
+                $customer = (object) $session->customer_details;
+            }
+
+            $orderItems = json_decode($session->metadata->order_items, true);
+            $amount = (float) $session->metadata->amount;
+            $userId = $session->metadata->user_id;
+
             $billingData = [
                 'billing_name' => $customer->name,
                 'billing_email' => $customer->email,
-                'billing_address' => json_encode($customer->address),
+                'billing_address' => $customer->address->city ?? null,
             ];
 
-            // Create an instance of the OrderCreator service.
+            // OrderCreator service.
             $orderCreator = new OrderCreator;
-
-            // Create the order without a user_id since this might be a guest checkout.
             $order = $orderCreator->createOrder($billingData, $orderItems, $userId, $amount);
 
-            // Optionally, you can log or perform other actions with the created order.
+            return response()->json([
+                'message' => 'Order created successfully',
+                'order' => $order,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        return response()->json(['message' => 'Webhook received']);
     }
+
+    // public function handleWebhook(Request $request)
+    // {
+    //     Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    //     $event = $request->all();
+
+    //     if ($event['type'] === 'checkout.session.completed') {
+    //         $session = $event['data']['object'];
+
+    //         // Retrieve customer details from Stripe.
+    //         $customer = Customer::retrieve($session['customer']);
+    //         // Decode order items from metadata.
+    //         $orderItems = json_decode($session['metadata']['order_items'], true);
+    //         $amount = (float) $session['metadata']['amount'];
+    //         $userId = $session['metadata']['user_id'];
+
+    //         // Prepare billing data. Adjust keys as per your Order table columns.
+    //         $billingData = [
+    //             'billing_name' => $customer->name,
+    //             'billing_email' => $customer->email,
+    //             'billing_address' => json_encode($customer->address),
+    //         ];
+
+    //         // Create an instance of the OrderCreator service.
+    //         $orderCreator = new OrderCreator;
+
+    //         // Create the order without a user_id since this might be a guest checkout.
+    //         $order = $orderCreator->createOrder($billingData, $orderItems, $userId, $amount);
+
+    //         // Optionally, you can log or perform other actions with the created order.
+    //     }
+
+    //     return response()->json(['message' => 'Webhook received']);
+    // }
 }

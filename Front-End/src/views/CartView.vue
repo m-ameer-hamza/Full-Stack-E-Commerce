@@ -1,10 +1,51 @@
 <script setup>
 import CartViewTable from "../components/CartViewTable.vue";
 import { useCartStore } from "@/stores/cartStore";
-import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/userStore";
+import paymentAPI from "../../apis/paymentAPI";
+import { useMutation } from "@tanstack/vue-query";
+import { useToast } from "vue-toastification";
+import { watch } from "vue";
 
 const cartStore = useCartStore();
-const router = useRouter();
+const userStore = useUserStore();
+const toast = useToast();
+const { createPaymentIntent } = paymentAPI();
+
+const checkOutCartHandler = () => {
+  return cartStore.cart.map((item) => {
+    return {
+      product_id: item.id,
+      title: item.title,
+      price: item.price,
+      quantity: item.quantity,
+    };
+  });
+};
+
+const checkOutHandler = () => {
+  if (userStore.isAuthenticated) {
+    const checkOutCart = checkOutCartHandler();
+    checkOutMutate.mutate({
+      items: checkOutCart,
+      amount: cartStore.totalPrice,
+    });
+  } else {
+    //convert it to popup using sweetalert
+    alert("Please login to continue");
+  }
+};
+
+const checkOutMutate = useMutation({
+  mutationFn: createPaymentIntent,
+  mutationKey: ["createPaymentIntent"],
+  onSuccess: (data) => {
+    window.location.href = data.url;
+  },
+  onError: (error) => {
+    console.log(error);
+  },
+});
 </script>
 
 <template>
@@ -58,11 +99,11 @@ const router = useRouter();
             </div>
             <button
               :disabled="cartStore.cart.length === 0"
-              @click="cartStore.cart.length > 0 && router.push('/checkout')"
+              @click="checkOutHandler"
               :class="`px-14 py-4 mt-11 mr-2.5 ml-3 ${
                 cartStore.cart.length === 0
                   ? 'cursor-not-allowed pointer-events-none opacity-50'
-                  : 'hover:bg-blue-100'
+                  : 'hover:bg-orange-100'
               } text-xl text-black rounded-2xl border border-black border-solid max-md:px-5 max-md:mt-10 max-md:ml-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500`"
             >
               Check Out
