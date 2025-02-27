@@ -8,6 +8,7 @@ import CartView from "@/views/CartView.vue";
 import CheckOutView from "@/views/CheckOutView.vue";
 import PaymentSuccess from "@/views/PaymentSuccess.vue";
 import PaymentFail from "@/views/PaymentFail.vue";
+import NotFoundView from "@/views/NotFoundView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -55,6 +56,11 @@ const router = createRouter({
       path: "/payment-cancelled",
       name: "PaymentFailure",
       component: PaymentFail,
+    },
+    {
+      path: "/:catchAll(.*)",
+      name: "not-found",
+      component: NotFoundView,
     },
   ],
 });

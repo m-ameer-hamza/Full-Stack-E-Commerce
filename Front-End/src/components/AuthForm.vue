@@ -107,6 +107,7 @@ const loginMutation = useMutation({
       token: data.token,
       isAuthenticated: true,
     });
+
     router.push("/");
   },
 });
@@ -118,7 +119,6 @@ const isLoading = computed(() =>
     : loginMutation?.isLoading?.value
 );
 </script>
-
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-100 pb-4">
     <div class="w-full max-w-lg p-10 space-y-8 bg-white rounded-lg shadow-lg">
