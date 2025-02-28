@@ -11,6 +11,9 @@ import { RouterView } from "vue-router";
 const heroTitle = ref("");
 const route = useRoute();
 const isCartVisible = ref(false);
+
+const hideLayout = computed(() => route.meta.hideLayout === true);
+
 const isHeroAndBannerVisible = computed(() => {
   const excludedPaths = ["/", "/login", "/register"];
   if (excludedPaths.includes(route.path)) {
@@ -19,7 +22,6 @@ const isHeroAndBannerVisible = computed(() => {
   if (route.path.startsWith("/product/")) {
     return false;
   }
-
   return true;
 });
 
@@ -41,10 +43,9 @@ const toggleCart = () => {
 </script>
 
 <template>
-  <NavBar @cart-click="toggleCart" />
-  <Hero v-if="isHeroAndBannerVisible" :heroTitle="heroTitle" />
+  <NavBar v-if="!hideLayout" @cart-click="toggleCart" />
+  <Hero v-if="!hideLayout && isHeroAndBannerVisible" :heroTitle="heroTitle" />
   <RouterView />
-  <Banner v-if="isHeroAndBannerVisible" />
-  <CartModel v-if="isCartVisible" @cart-close="toggleCart" />
-  <!-- <Footer /> -->
+  <Banner v-if="!hideLayout && isHeroAndBannerVisible" />
+  <CartModel v-if="!hideLayout && isCartVisible" @cart-close="toggleCart" />
 </template>

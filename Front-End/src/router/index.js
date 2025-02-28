@@ -9,6 +9,7 @@ import CheckOutView from "@/views/CheckOutView.vue";
 import PaymentSuccess from "@/views/PaymentSuccess.vue";
 import PaymentFail from "@/views/PaymentFail.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -17,31 +18,37 @@ const router = createRouter({
       name: "home",
       component: HomeView,
     },
+
     {
       path: "/register",
       name: "register",
       component: RegisterView,
     },
+
     {
       path: "/login",
       name: "login",
       component: LoginView,
     },
+
     {
       path: "/products",
       name: "products",
       component: ProductsView,
     },
+
     {
       path: "/product/:id",
       name: "product",
       component: ProductView,
     },
+
     {
       path: "/cart",
       name: "cart",
       component: CartView,
     },
+
     {
       path: "/checkout",
       name: "checkout",
@@ -51,16 +58,20 @@ const router = createRouter({
       path: "/payment-success",
       name: "PaymentSuccess",
       component: PaymentSuccess,
+      meta: { hideLayout: true },
     },
+
     {
       path: "/payment-cancelled",
       name: "PaymentFailure",
       component: PaymentFail,
+      meta: { hideLayout: true },
     },
     {
       path: "/:catchAll(.*)",
       name: "not-found",
       component: NotFoundView,
+      meta: { hideLayout: true },
     },
   ],
 });

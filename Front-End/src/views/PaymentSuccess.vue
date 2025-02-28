@@ -30,7 +30,14 @@ function goHome() {
   router.push("/");
 }
 
+const handlePopState = () => {
+  router.replace({ name: "home" });
+};
+
 onMounted(() => {
+  window.history.pushState(null, "", window.location.href);
+  window.addEventListener("popstate", handlePopState);
+
   sessionId.value = route.query.session_id || "";
   if (sessionId.value) {
     isLoading.value = true;
@@ -75,7 +82,7 @@ onMounted(() => {
         </p>
         <!-- Button -->
         <button
-          class="mt-6 btn bg-green px-10 py-2 text-white rounded-md shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+          class="bg-yellow-600 border hover:bg-yellow-700 border-yellow-600 text-white text-lg font-bold uppercase rounded-md px-8 py-2 mt-4"
           @click="goHome"
           :disabled="isLoading"
         >
