@@ -1,15 +1,15 @@
 <script setup>
 import CartViewTable from "../components/CartViewTable.vue";
 import { useCartStore } from "@/stores/cartStore";
-import { useUserStore } from "@/stores/userStore";
 import paymentAPI from "../../apis/paymentAPI";
 import { useMutation } from "@tanstack/vue-query";
 import { useToast } from "vue-toastification";
+import { isAuthenticated } from "@/utils/auth";
 
 const cartStore = useCartStore();
-const userStore = useUserStore();
 const toast = useToast();
 const { createPaymentIntent } = paymentAPI();
+const authUser = isAuthenticated();
 
 const checkOutCartHandler = () => {
   return cartStore.cart.map((item) => {
@@ -23,7 +23,7 @@ const checkOutCartHandler = () => {
 };
 
 const checkOutHandler = () => {
-  if (userStore.isAuthenticated) {
+  if (authUser) {
     const checkOutCart = checkOutCartHandler();
     checkOutMutate.mutate({
       items: checkOutCart,

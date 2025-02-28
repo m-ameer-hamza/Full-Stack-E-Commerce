@@ -4,8 +4,8 @@ import { RouterLink, useRouter } from "vue-router";
 import { useMutation } from "@tanstack/vue-query";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import { useToast } from "vue-toastification";
-import { useUserStore } from "../stores/userStore.js";
 import authAPI from "../../apis/authAPI.js";
+import { setAuthToken } from "@/utils/auth.js";
 
 const props = defineProps({
   title: {
@@ -17,7 +17,6 @@ const props = defineProps({
 const router = useRouter();
 const toast = useToast();
 const { register, login } = authAPI();
-const userStore = useUserStore();
 
 const formType = computed(() =>
   props.title === "Register" ? "register" : "login"
@@ -101,12 +100,7 @@ const loginMutation = useMutation({
   ...mutationConfig,
   onSuccess: (data) => {
     toast.success("Login Successful");
-    userStore.setUser({
-      name: data.user.name,
-      email: data.user.email,
-      token: data.token,
-      isAuthenticated: true,
-    });
+    setAuthToken(data.token);
 
     router.push("/");
   },

@@ -10,7 +10,6 @@ export default function paymentAPI() {
   };
 
   const storeCheckout = async (sessionID) => {
-    console.log("Session ID is:", sessionID);
     const response = await api.post("/storeCheckout", {
       session_id: sessionID,
     });

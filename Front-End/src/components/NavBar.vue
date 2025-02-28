@@ -2,12 +2,12 @@
 import Logo from "../assets/img/logo.jpeg";
 import Account from "../assets/img/login.jpeg";
 import { computed } from "vue";
-import { useUserStore } from "../stores/userStore";
 import { RouterLink, useRoute, useRouter } from "vue-router";
+import { isAuthenticated } from "@/utils/auth";
 
 const router = useRouter();
 const route = useRoute();
-const userStore = useUserStore();
+const authUser = isAuthenticated();
 
 const icon = computed(() =>
   route.path === "/login" ? "pi-user-plus" : "pi-user"
@@ -75,9 +75,16 @@ const cartClick = () => {
       </nav>
 
       <div class="flex gap-10 max-md:mt-10">
+        <button
+          v-if="authUser"
+          aria-label="user"
+          class="hover:opacity-80 transition-opacity mt-[4px]"
+        >
+          <i :class="`pi ${icon} text-xl text-black`"></i>
+        </button>
         <RouterLink
+          v-else
           to="/login"
-          v-if="!userStore.isAuthenticated"
           aria-label="Account"
           class="hover:opacity-80 transition-opacity"
         >
@@ -87,13 +94,7 @@ const cartClick = () => {
             class="object-contain w-7 aspect-square"
           />
         </RouterLink>
-        <button
-          v-else
-          aria-label="user"
-          class="hover:opacity-80 transition-opacity mt-[4px]"
-        >
-          <i :class="`pi ${icon} text-xl text-black`"></i>
-        </button>
+
         <button
           aria-label="Search"
           class="hover:opacity-80 transition-opacity flex items-center justify-center w-7 h-7"

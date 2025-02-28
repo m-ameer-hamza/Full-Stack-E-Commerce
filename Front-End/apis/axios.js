@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useToast } from "vue-toastification";
-import { useUserStore } from "@/stores/userStore";
+import { getAuthToken } from "@/utils/auth";
 
 const toast = useToast();
 
@@ -14,8 +14,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const userStore = useUserStore();
-    const token = userStore?.token;
+    const token = getAuthToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

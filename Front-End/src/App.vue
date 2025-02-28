@@ -19,7 +19,6 @@ const isHeroAndBannerVisible = computed(() => {
   if (route.path.startsWith("/product/")) {
     return false;
   }
-  if (route.path.startsWith("/payment-success")) return false;
 
   return true;
 });
