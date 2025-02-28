@@ -4,18 +4,21 @@ import { useRouter, useRoute } from "vue-router";
 import { useMutation } from "@tanstack/vue-query";
 import paymentAPI from "../../apis/paymentAPI";
 import { useToast } from "vue-toastification";
+import { useCartStore } from "@/stores/cartStore";
 
 const router = useRouter();
 const route = useRoute();
 const isLoading = ref(false);
 const sessionId = ref("");
 const toast = useToast();
+const { clearCart } = useCartStore();
 
 const { storeCheckout } = paymentAPI();
 const completeOrder = useMutation({
   mutationFn: storeCheckout,
   onSuccess: () => {
     isLoading.value = false;
+    clearCart();
   },
   onError: (error) => {
     isLoading.value = false;
