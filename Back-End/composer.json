@@ -10,12 +10,16 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "backpack/crud": "^6.8",
+        "backpack/theme-coreuiv2": "^1.2",
+        "backpack/theme-tabler": "^1.2",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "stripe/stripe-php": "^16.6"
     },
     "require-dev": {
+        "backpack/generators": "^4.0",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.21",

@@ -60,6 +60,15 @@ return [
             'report' => false,
         ],
 
+        'basset' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/basset'),
+            'url' => env('APP_URL').'/storage/basset',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
 
     /*
