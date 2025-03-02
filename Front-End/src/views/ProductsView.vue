@@ -10,6 +10,7 @@ import { RouterLink } from "vue-router";
 const currentPage = ref(1);
 const lastPage = ref(1);
 const productCount = ref("12");
+const productSort = ref("default");
 
 const { getProducts } = productsAPI();
 
@@ -29,14 +30,31 @@ watchEffect(() => {
   }
 });
 
-const products = computed(() =>
-  productResponse.value ? productResponse.value.products : []
-);
+const sortedProducts = computed(() => {
+  const unsortedProducts = productResponse.value
+    ? productResponse.value.products
+    : [];
+
+  if (productSort.value === "ascending") {
+    return [...unsortedProducts].sort(
+      (a, b) => parseFloat(a.price) - parseFloat(b.price)
+    );
+  } else if (productSort.value === "descending") {
+    return [...unsortedProducts].sort(
+      (a, b) => parseFloat(b.price) - parseFloat(a.price)
+    );
+  }
+
+  return unsortedProducts;
+});
+
+const products = sortedProducts;
 
 function changePage(page) {
   currentPage.value = page;
 }
 </script>
+
 <template>
   <main class="flex-grow mb-28">
     <!-- Filter Section -->
@@ -138,12 +156,13 @@ function changePage(page) {
             >Sort by Price</label
           >
           <select
+            v-model="productSort"
             id="sort-select"
             class="w-40 h-10 px-3 py-2 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-100"
           >
-            <option>Default</option>
-            <option>Ascending</option>
-            <option>Dscending</option>
+            <option value="default">Default</option>
+            <option value="ascending">Ascending</option>
+            <option value="descending">Dscending</option>
           </select>
         </div>
       </div>
