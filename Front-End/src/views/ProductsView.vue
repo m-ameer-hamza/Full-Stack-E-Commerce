@@ -9,12 +9,13 @@ import { RouterLink } from "vue-router";
 
 const currentPage = ref(1);
 const lastPage = ref(1);
+const productCount = ref("12");
 
 const { getProducts } = productsAPI();
 
 const { data: productResponse, isLoading } = useQuery({
-  queryKey: ["featuredProducts", currentPage],
-  queryFn: () => getProducts(currentPage.value),
+  queryKey: ["Products", currentPage, productCount],
+  queryFn: () => getProducts(currentPage.value, productCount.value),
   staleTime: 1000 * 60 * 5,
   cacheTime: 1000 * 60 * 30,
   refetchOnWindowFocus: false,
@@ -117,25 +118,32 @@ function changePage(page) {
               </transition>
             </div>
             <div class="w-px bg-neutral-400 h-[37px]"></div>
-            <div>Showing 1–16 of 32 results</div>
+            <div>Showing 1–{{ productCount }} of 32 results</div>
           </div>
         </div>
 
         <!-- Right Group: Show & Sort -->
-        <div class="flex items-center gap-10 text-xl">
+        <div class="flex items-center gap-14 text-base">
           <label for="show-select" class="whitespace-nowrap">Show</label>
           <select
+            v-model="productCount"
             id="show-select"
-            class="px-5 text-black whitespace-nowrap bg-white h-[55px] w-[55px] border border-gray-300 rounded"
+            class="w-28 h-10 px-3 py-2 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-100"
           >
-            <option>16</option>
+            <option value="8">8</option>
+            <option value="12">12</option>
+            <option value="16">16</option>
           </select>
-          <label for="sort-select" class="whitespace-nowrap">Sort by</label>
+          <label for="sort-select" class="whitespace-nowrap pl-5"
+            >Sort by Price</label
+          >
           <select
             id="sort-select"
-            class="px-8 py-3.5 text-black whitespace-nowrap bg-white border border-gray-300 rounded"
+            class="w-40 h-10 px-3 py-2 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-100"
           >
             <option>Default</option>
+            <option>Ascending</option>
+            <option>Dscending</option>
           </select>
         </div>
       </div>

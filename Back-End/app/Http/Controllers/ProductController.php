@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductResourse;
+use Illuminate\Http\Request;
 use App\Models\Product;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $limit = $request->query('limit',12);
         // Fetch 9 products per page
-        $products = Product::paginate(12);
+        $products = Product::paginate($limit);
 
         return response()->json([
             'message' => 'Products fetched successfully',
