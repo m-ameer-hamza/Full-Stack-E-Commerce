@@ -48,4 +48,5 @@ const toggleCart = () => {
   <RouterView />
   <Banner v-if="!hideLayout && isHeroAndBannerVisible" />
   <CartModel v-if="!hideLayout && isCartVisible" @cart-close="toggleCart" />
+  <Footer v-if="!hideLayout" />
 </template>

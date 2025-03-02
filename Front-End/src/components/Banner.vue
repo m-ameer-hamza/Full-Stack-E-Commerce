@@ -5,7 +5,9 @@ import ShippingIcon from "../assets/shipping.png";
 import SupportIcon from "../assets/support.png";
 </script>
 <template>
-  <div class="flex flex-col justify-center items-center py-24 bg-orange-50">
+  <div
+    class="flex mb-[100px] flex-col justify-center items-center py-24 bg-orange-50"
+  >
     <div
       class="flex flex-wrap gap-10 justify-between items-center max-w-full w-[1440px]"
     >

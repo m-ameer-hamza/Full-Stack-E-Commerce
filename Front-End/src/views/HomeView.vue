@@ -19,7 +19,7 @@ const { data: products, isLoading } = useQuery({
 });
 </script>
 <template>
-  <main class="flex-grow mb-[200px]">
+  <main class="flex-grow mb-[300px]">
     <!-- Image with overlay card -->
     <section class="relative mt-3 h-[617px] w-full">
       <img
