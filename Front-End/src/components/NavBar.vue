@@ -1,21 +1,18 @@
 <script setup>
 import Logo from "../assets/img/logo.jpeg";
 import Account from "../assets/img/login.jpeg";
-import { computed } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { isAuthenticated } from "@/utils/auth";
+import Logout from "./Logout.vue";
 
 const router = useRouter();
 const route = useRoute();
-const authUser = isAuthenticated();
+const authUser = ref(isAuthenticated());
 
-const icon = computed(() =>
-  route.path === "/login" ? "pi-user-plus" : "pi-user"
-);
-
-const goToLogin = () => {
-  route.path === "/login" ? router.push("register") : router.push("login");
-};
+watchEffect(() => {
+  authUser.value = isAuthenticated();
+});
 
 const emit = defineEmits(["cart-click"]);
 
@@ -75,13 +72,7 @@ const cartClick = () => {
       </nav>
 
       <div class="flex gap-10 max-md:mt-10">
-        <button
-          v-if="authUser"
-          aria-label="user"
-          class="hover:opacity-80 transition-opacity mt-[4px]"
-        >
-          <i :class="`pi ${icon} text-xl text-black`"></i>
-        </button>
+        <Logout v-if="authUser" />
         <RouterLink
           v-else
           to="/login"
