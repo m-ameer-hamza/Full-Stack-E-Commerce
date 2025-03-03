@@ -5,11 +5,12 @@ import { computed, ref, watchEffect } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { isAuthenticated } from "@/utils/auth";
 import Logout from "./Logout.vue";
+import { useCartStore } from "../stores/cartStore.js";
 
 const router = useRouter();
 const route = useRoute();
 const authUser = ref(isAuthenticated());
-
+const cartStore = useCartStore();
 watchEffect(() => {
   authUser.value = isAuthenticated();
 });
@@ -103,10 +104,15 @@ const cartClick = () => {
             class="object-contain w-7 aspect-square"
           />
         </button>
-        <button @click="cartClick" class="hover:opacity-80 transition-opacity">
-          <i
-            class="pi pi-shopping-cart text-2xl object-contain w-7 aspect-square"
-          ></i>
+        <button class="relative flex items-center justify-center">
+          <!-- Badge -->
+          <span
+            class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-yellow-600 text-white text-xs font-bold px-2 py-1 rounded-full"
+          >
+            {{ cartStore.cart.length }}
+          </span>
+          <!-- Cart Icon -->
+          <i class="pi pi-shopping-cart text-2xl"></i>
         </button>
       </div>
     </div>
