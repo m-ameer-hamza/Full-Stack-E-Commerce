@@ -38,10 +38,7 @@ class OrderCreator
                 'amount' => $amount,
             ]);
         }
-
-
         $order->update(['total' => $totalAmount]);
-
         SendOrderConfirmationEmail::dispatch($order);
 
         return $order;

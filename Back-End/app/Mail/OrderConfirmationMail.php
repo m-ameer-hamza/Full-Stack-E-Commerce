@@ -35,10 +35,14 @@ class OrderConfirmationMail extends Mailable
     /**
      * Get the message content definition.
      */
-   public function content(): Content
+public function content(): Content
 {
+    // Load relationships before returning the content
+    $this->order->load('orderItems.product');
+
     return new Content(
         view: 'emails.orderConfirmation',
+        with: ['order' => $this->order]
     );
 }
 
