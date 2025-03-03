@@ -63,17 +63,10 @@ const deleteItem = (id) => {
     <td class="px-6 py-4">${{ (item.price * item.quantity).toFixed(2) }}</td>
     <!-- Remove Column -->
     <td class="px-6 py-4">
-      <button
-        aria-label="Remove item"
-        class="focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/52cb9a1f112445149b6b31ac05588017/73d80f01b0cdb1210a1c0aac3f437db9c22d7bbbe5b14bb4e8efdde8828e5edb?apiKey=52cb9a1f112445149b6b31ac05588017&"
-          alt="Remove item icon"
-          class="object-contain w-7 h-7"
-        />
-      </button>
+      <i
+        class="pi pi-trash text-2xl pl-5 text-yellow-700 hover:text-yellow-800 hover:cursor-pointer ease-in-out duration-200"
+        @click="deleteItem(item.id)"
+      ></i>
     </td>
   </tr>
 </template>

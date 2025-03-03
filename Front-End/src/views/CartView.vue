@@ -1,114 +1,81 @@
 <script setup>
+import { ref, watchEffect } from "vue";
+import { RouterLink } from "vue-router";
 import CartViewTable from "../components/CartViewTable.vue";
+import CartViewCheckOut from "../components/CartViewCheckOut.vue";
 import { useCartStore } from "@/stores/cartStore";
-import paymentAPI from "../../apis/paymentAPI";
-import { useMutation } from "@tanstack/vue-query";
-import { useToast } from "vue-toastification";
 import { isAuthenticated } from "@/utils/auth";
 
 const cartStore = useCartStore();
-const toast = useToast();
-const { createPaymentIntent } = paymentAPI();
-const authUser = isAuthenticated();
+const authUser = ref(isAuthenticated());
 
-const checkOutCartHandler = () => {
-  return cartStore.cart.map((item) => {
-    return {
-      product_id: item.id,
-      title: item.title,
-      price: item.price,
-      quantity: item.quantity,
-    };
-  });
-};
-
-const checkOutHandler = () => {
-  if (authUser) {
-    const checkOutCart = checkOutCartHandler();
-    checkOutMutate.mutate({
-      items: checkOutCart,
-      amount: cartStore.totalPrice,
-    });
-  } else {
-    //convert it to popup using sweetalert
-    alert("Please login to continue");
-  }
-};
-
-const checkOutMutate = useMutation({
-  mutationFn: createPaymentIntent,
-  mutationKey: ["createPaymentIntent"],
-  onSuccess: (data) => {
-    window.location.href = data.url;
-  },
-  onError: (error) => {
-    console.log(error);
-  },
+watchEffect(() => {
+  authUser.value = !isAuthenticated();
 });
 </script>
 
 <template>
-  <div class="flex flex-col rounded-none">
-    <div class="px-20 py-16 w-full bg-white max-md:px-5 max-md:max-w-full">
-      <div class="flex gap-5 max-md:flex-col">
-        <!-- Product Table -->
-        <div class="w-[68%] max-md:w-full">
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-base text-black">
-              <thead class="bg-orange-50">
-                <tr>
-                  <th class="px-6 py-4 text-left">Product</th>
-                  <th class="px-6 py-4 text-left">Price</th>
-                  <th class="px-12 py-4 text-left">Quantity</th>
-                  <th class="px-6 py-4 text-left">Subtotal</th>
-                  <th class="px-6 py-4 text-left">Remove</th>
-                </tr>
-              </thead>
-              <tbody>
-                <CartViewTable />
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Cart Totals -->
-        <div class="w-[32%] max-md:w-full sticky top-[80px]">
-          <div
-            class="flex flex-col px-20 pt-4 pb-20 mx-auto bg-orange-50 max-md:px-5 max-md:mt-10"
-          >
-            <h2 class="self-center text-3xl font-semibold text-black">
-              Cart Totals
-            </h2>
-            <div class="flex gap-5 justify-between mt-16 max-md:mt-10">
+  <div>
+    <div v-if="cartStore.cart.length > 0" class="flex flex-col rounded-none">
+      <div class="px-20 py-16 w-full bg-white max-md:px-5 max-md:max-w-full">
+        <div class="flex gap-5 max-md:flex-col">
+          <!-- Product Table -->
+          <div class="w-[68%] max-md:w-full">
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-base text-black">
+                <thead class="bg-orange-50">
+                  <tr>
+                    <th class="px-6 py-4 text-left">Product</th>
+                    <th class="px-6 py-4 text-left">Price</th>
+                    <th class="px-12 py-4 text-left">Quantity</th>
+                    <th class="px-6 py-4 text-left">Subtotal</th>
+                    <th class="px-6 py-4 text-left">Remove</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <CartViewTable />
+                </tbody>
+              </table>
+              <!-- Login prompt -->
               <div
-                class="flex flex-col self-start text-base font-medium text-black whitespace-nowrap"
+                v-if="authUser"
+                class="flex items-center justify-center mt-6 space-x-4 bg-gray-100 p-4 rounded"
               >
-                <div>Subtotal</div>
-                <div class="self-start mt-8">Total</div>
-              </div>
-              <div class="flex flex-col">
-                <div class="self-end text-base text-black">
-                  $ {{ cartStore.totalPrice.toFixed(2) }}
-                </div>
-                <div class="mt-8 text-xl font-medium text-black">
-                  $ {{ cartStore.totalPrice.toFixed(2) }}
-                </div>
+                <span class="text-lg font-medium text-gray-800"
+                  >Please log in to continue with your purchase</span
+                >
+                <RouterLink
+                  to="/login"
+                  class="px-4 py-2 bg-yellow-600 text-white font-semibold rounded hover:bg-yellow-700 transition-colors"
+                >
+                  Login Now
+                </RouterLink>
               </div>
             </div>
-            <button
-              :disabled="cartStore.cart.length === 0"
-              @click="checkOutHandler"
-              :class="`px-14 py-4 mt-11 mr-2.5 ml-3 ${
-                cartStore.cart.length === 0
-                  ? 'cursor-not-allowed pointer-events-none opacity-50'
-                  : 'hover:bg-orange-100'
-              } text-xl text-black rounded-2xl border border-black border-solid max-md:px-5 max-md:mt-10 max-md:ml-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500`"
-            >
-              Check Out
-            </button>
           </div>
+
+          <!-- Cart Totals -->
+          <CartViewCheckOut />
         </div>
       </div>
+    </div>
+
+    <!-- Cart empty-->
+    <div
+      v-else
+      class="flex flex-col items-center justify-center h-[450px] bg-white"
+    >
+      <p class="text-3xl font-semibold text-black mb-6">Our Cart is Empty</p>
+      <p class="text-lg text-slate-400 mb-8">
+        Add items in your cart than you can proceed to check out
+      </p>
+      <router-link to="/products">
+        <button
+          class="bg-yellow-600 text-white px-6 py-3 rounded-lg hover:bg-yellow-500"
+        >
+          Go to Products
+        </button>
+      </router-link>
     </div>
   </div>
 </template>
