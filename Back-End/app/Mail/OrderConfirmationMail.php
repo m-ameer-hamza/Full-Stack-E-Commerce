@@ -37,7 +37,6 @@ class OrderConfirmationMail extends Mailable
      */
 public function content(): Content
 {
-    // Load relationships before returning the content
     $this->order->load('orderItems.product');
 
     return new Content(
