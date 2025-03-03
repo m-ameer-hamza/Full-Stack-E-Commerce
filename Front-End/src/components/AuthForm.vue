@@ -121,60 +121,69 @@ const isLoading = computed(() =>
       </h2>
       <form class="space-y-6">
         <!-- Name Field -->
-        <div v-if="isNameVisible" class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-4">
-            <i class="pi pi-user text-orange-500"></i>
-          </span>
-          <input
-            type="text"
-            v-model="form.name"
-            placeholder="Name"
-            class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
-          />
-          <p v-if="errors.name" class="text-red-700">
+        <div v-if="isNameVisible">
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+              <i class="pi pi-user text-yellow-600"></i>
+            </span>
+            <input
+              type="text"
+              v-model="form.name"
+              placeholder="Name"
+              class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600"
+            />
+          </div>
+          <p v-if="errors.name" class="text-red-700 mt-1">
             Min 5 letters and no special character
           </p>
         </div>
+
         <!-- Email Field -->
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-4">
-            <i class="pi pi-envelope text-orange-500"></i>
-          </span>
-          <input
-            type="email"
-            v-model="form.email"
-            placeholder="Email"
-            class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
-          />
-          <p v-if="errors.email" class="text-red-700">Email is invalid</p>
+        <div>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+              <i class="pi pi-envelope text-yellow-600"></i>
+            </span>
+            <input
+              type="email"
+              v-model="form.email"
+              placeholder="Email"
+              class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600"
+            />
+          </div>
+          <p v-if="errors.email" class="text-red-700 mt-1">Email is invalid</p>
         </div>
+
         <!-- Password Field -->
-        <div class="relative">
-          <!-- Left lock icon -->
-          <span class="absolute inset-y-0 left-0 flex items-center pl-4">
-            <i class="pi pi-lock text-orange-500"></i>
-          </span>
-          <!-- Password input with dynamic type -->
-          <input
-            :type="showPassword ? 'text' : 'password'"
-            v-model="form.password"
-            placeholder="Password"
-            class="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
-          />
-          <!-- Right eye icon for toggling visibility -->
-          <span
-            class="absolute inset-y-0 right-0 flex items-center pr-4 cursor-pointer"
-            @click="togglePassword"
-          >
-            <i
-              :class="
-                showPassword
-                  ? 'pi pi-eye-slash text-orange-500'
-                  : 'pi pi-eye text-orange-500'
-              "
-            ></i>
-          </span>
-          <p v-if="errors.password" class="text-red-700">
+        <div>
+          <div class="relative">
+            <!-- Left lock icon -->
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+              <i class="pi pi-lock text-yellow-600"></i>
+            </span>
+            <!-- Password input with dynamic type -->
+            <input
+              :type="showPassword ? 'text' : 'password'"
+              v-model="form.password"
+              placeholder="Password"
+              class="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600"
+            />
+            <!-- Right eye icon for toggling visibility -->
+            <span
+              class="absolute inset-y-0 right-0 flex items-center pr-4 cursor-pointer"
+              @click="togglePassword"
+            >
+              <i
+                :class="
+                  showPassword
+                    ? 'pi pi-eye-slash text-yellow-600'
+                    : 'pi pi-eye text-yellow-600'
+                "
+              ></i>
+            </span>
+          </div>
+          <!-- Error message placed outside the relative container -->
+          <p v-if="errors.password" class="text-red-700 mt-1">
             Min 8 characters and mix with special character
           </p>
         </div>
@@ -184,7 +193,7 @@ const isLoading = computed(() =>
           type="button"
           v-if="title === 'Register'"
           @click="handleSubmit('register')"
-          class="w-full flex items-center justify-center bg-orange-400 hover:bg-orange-500 text-white font-semibold py-3 rounded-lg transition duration-300"
+          class="w-full flex items-center justify-center bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 rounded-lg transition duration-300"
         >
           <!-- When loading, show spinner and "Sing In ...." -->
           <template v-if="isLoading">
@@ -202,7 +211,7 @@ const isLoading = computed(() =>
           type="button"
           v-else
           @click="handleSubmit('login')"
-          class="w-full flex items-center justify-center bg-orange-400 hover:bg-orange-500 text-white font-semibold py-3 rounded-lg transition duration-300"
+          class="w-full flex items-center justify-center bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 rounded-lg transition duration-300"
         >
           Login
         </button>
@@ -211,7 +220,7 @@ const isLoading = computed(() =>
       <div class="text-center">
         <RouterLink
           :to="isRegisterForm ? '/login' : '/register'"
-          class="text-orange-500 hover:underline font-medium"
+          class="text-yellow-700 hover:underline font-medium"
         >
           {{
             isRegisterForm
