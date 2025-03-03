@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Jobs\SendOrderConfirmationEmail;
 
 class OrderCreator
 {
@@ -40,6 +41,8 @@ class OrderCreator
 
 
         $order->update(['total' => $totalAmount]);
+
+        SendOrderConfirmationEmail::dispatch($order);
 
         return $order;
     }

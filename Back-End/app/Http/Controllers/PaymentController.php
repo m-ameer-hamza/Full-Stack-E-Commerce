@@ -71,7 +71,7 @@ class PaymentController extends Controller
             return response()->json(['error' => 'Session ID is required'], 400);
         }
 
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        \Stripe\Stripe::setApiKey("sk_test_51Pnl2RL5kaM3Eh5sNvXPqkjLNJevQfy49AsnPLOa2SZ9r45YLMO9wTgT8SzAw55dz0Bi1Y0HT2GUJZ9ZweDpGVIY00JOiHeJc6");
 
         try {
             $session = \Stripe\Checkout\Session::retrieve($sessionId);
