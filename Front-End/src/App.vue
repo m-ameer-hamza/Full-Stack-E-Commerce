@@ -4,7 +4,7 @@ import Hero from "./components/Hero.vue";
 import Banner from "./components/Banner.vue";
 import Footer from "./components/Footer.vue";
 import CartModel from "./components/CartModel.vue";
-import { ref, computed, watch } from "vue";
+import { ref, computed, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { RouterView } from "vue-router";
 
@@ -25,17 +25,13 @@ const isHeroAndBannerVisible = computed(() => {
   return true;
 });
 
-watch(
-  () => route.path,
-  (newPath) => {
-    if (newPath === "/products") {
-      heroTitle.value = "All Products";
-    }
-    if (newPath === "/cart") {
-      heroTitle.value = "Cart";
-    }
+watchEffect(() => {
+  if (route.path === "/products") {
+    heroTitle.value = "All Products";
+  } else if (route.path === "/cart") {
+    heroTitle.value = "Cart";
   }
-);
+});
 
 const toggleCart = () => {
   isCartVisible.value = !isCartVisible.value;

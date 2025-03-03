@@ -1,4 +1,11 @@
-<script setup></script>
+<script setup>
+const props = defineProps({
+  heroTitle: {
+    type: String,
+    default: "All Products",
+  },
+});
+</script>
 <template>
   <div class="flex flex-col text-black whitespace-nowrap mt-[104px]">
     <div
@@ -18,7 +25,9 @@
           <div
             class="absolute inset-0 flex flex-col items-center justify-center max-w-full w-[124px]"
           >
-            <h1 class="text-5xl font-medium max-md:text-4xl">All Products</h1>
+            <h1 class="text-5xl font-medium max-md:text-4xl">
+              {{ props.heroTitle }}
+            </h1>
             <nav aria-label="Breadcrumb" class="relative mt-8">
               <ol class="flex gap-1.5 text-base">
                 <li class="grow font-medium">
@@ -32,7 +41,9 @@
                   <icon class="pi pi-angle-right text-2xl relative top-1">
                   </icon>
                 </li>
-                <li class="font-light" aria-current="page">Products</li>
+                <li class="text-xl top-10" aria-current="page">
+                  {{ props.heroTitle }}
+                </li>
               </ol>
             </nav>
           </div>

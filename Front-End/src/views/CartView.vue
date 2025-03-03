@@ -72,7 +72,6 @@ const checkOutMutate = useMutation({
         </div>
 
         <!-- Cart Totals -->
-        <!-- Ensure this container is not affected by any overflow on parent elements -->
         <div class="w-[32%] max-md:w-full sticky top-[80px]">
           <div
             class="flex flex-col px-20 pt-4 pb-20 mx-auto bg-orange-50 max-md:px-5 max-md:mt-10"
