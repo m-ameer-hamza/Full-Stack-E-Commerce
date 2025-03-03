@@ -110,6 +110,7 @@ const cartClick = () => {
         >
           <!-- Badge -->
           <span
+            v-if="cartStore.cart.length > 0"
             class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-yellow-600 text-white text-xs font-bold px-2 py-1 rounded-full"
           >
             {{ cartStore.cart.length }}
