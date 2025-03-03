@@ -104,7 +104,10 @@ const cartClick = () => {
             class="object-contain w-7 aspect-square"
           />
         </button>
-        <button class="relative flex items-center justify-center">
+        <button
+          @click="cartClick"
+          class="relative flex items-center justify-center"
+        >
           <!-- Badge -->
           <span
             class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-yellow-600 text-white text-xs font-bold px-2 py-1 rounded-full"
