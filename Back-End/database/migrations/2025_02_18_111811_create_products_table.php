@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->decimal('price', 10, 2);
-            $table->enum('category', ['electronics', 'mobile', 'accessories', 'grocery', 'clothing', 'appliances']);
+            $table->enum('category', ['furniture', 'lighting', 'decor']);
             $table->string('image')->nullable();
             $table->boolean('isFeatured')->default(false);
             $table->timestamps();

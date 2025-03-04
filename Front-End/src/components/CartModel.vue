@@ -65,25 +65,11 @@ const router = useRouter();
         <hr class="shrink-0 mt-6 h-px border border-solid border-zinc-300" />
 
         <div
-          class="flex gap-3.5 items-start self-center mt-7 text-xs text-black whitespace-nowrap"
+          @click="goToCart()"
+          class="flex h-[85px] items-center justify-center gap-2 bg-orange-50 text-black text-xs whitespace-nowrap px-4 py-2 rounded transition-colors duration-300 hover:bg-orange-100 hover:cursor-pointer"
         >
-          <button
-            @click="goToCart()"
-            class="gap-2.5 px-8 py-1.5 border border-black border-solid rounded-[50px] max-md:px-5"
-          >
-            Cart
-          </button>
-          <button
-            @click="goToCheckout()"
-            class="gap-2.5 px-8 py-1.5 border border-black border-solid rounded-[50px] max-md:px-5"
-          >
-            Checkout
-          </button>
-          <button
-            class="gap-2.5 px-8 py-1.5 border border-black border-solid rounded-[50px] max-md:px-5"
-          >
-            Comparison
-          </button>
+          <i class="pi pi-shopping-cart text-2xl"></i>
+          <span class="text-xl">Go to Cart</span>
         </div>
       </section>
     </div>

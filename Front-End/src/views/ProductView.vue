@@ -128,7 +128,7 @@ const addToCart = (product) => {
                 </div>
                 <div class="flex flex-wrap gap-10 mt-8 text-black">
                   <div
-                    class="flex gap-9 px-3 py-3 text-base whitespace-nowrap bg-white rounded-xl border border-neutral-400"
+                    class="flex gap-7 px-3 py-3 text-base whitespace-nowrap bg-white rounded-xl border border-neutral-400"
                     role="group"
                     aria-label="Quantity selector"
                   >
