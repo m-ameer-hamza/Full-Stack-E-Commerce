@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from "vue-router";
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: "Asgaard sofa",
@@ -35,7 +35,7 @@ defineProps({
         class="grow shrink self-stretch my-auto text-black w-[1014px] max-md:max-w-full"
         aria-current="page"
       >
-        {{ title }}
+        {{ props.title }}
       </div>
     </div>
   </div>
