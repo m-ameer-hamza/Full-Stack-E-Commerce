@@ -71,13 +71,13 @@ class PaymentController extends Controller
             return response()->json(['error' => 'Session ID is required'], 400);
         }
 
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(env('STRIPE_SECRET'));
 
         try {
-            $session = \Stripe\Checkout\Session::retrieve($sessionId);
+            $session = Session::retrieve($sessionId);
 
             if (! empty($session->customer)) {
-                $customer = \Stripe\Customer::retrieve($session->customer);
+                $customer = Customer::retrieve($session->customer);
             } else {
 
                 $customer = (object) $session->customer_details;
@@ -105,39 +105,4 @@ class PaymentController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-    // public function handleWebhook(Request $request)
-    // {
-    //     Stripe::setApiKey(env('STRIPE_SECRET'));
-
-    //     $event = $request->all();
-
-    //     if ($event['type'] === 'checkout.session.completed') {
-    //         $session = $event['data']['object'];
-
-    //         // Retrieve customer details from Stripe.
-    //         $customer = Customer::retrieve($session['customer']);
-    //         // Decode order items from metadata.
-    //         $orderItems = json_decode($session['metadata']['order_items'], true);
-    //         $amount = (float) $session['metadata']['amount'];
-    //         $userId = $session['metadata']['user_id'];
-
-    //         // Prepare billing data. Adjust keys as per your Order table columns.
-    //         $billingData = [
-    //             'billing_name' => $customer->name,
-    //             'billing_email' => $customer->email,
-    //             'billing_address' => json_encode($customer->address),
-    //         ];
-
-    //         // Create an instance of the OrderCreator service.
-    //         $orderCreator = new OrderCreator;
-
-    //         // Create the order without a user_id since this might be a guest checkout.
-    //         $order = $orderCreator->createOrder($billingData, $orderItems, $userId, $amount);
-
-    //         // Optionally, you can log or perform other actions with the created order.
-    //     }
-
-    //     return response()->json(['message' => 'Webhook received']);
-    // }
 }

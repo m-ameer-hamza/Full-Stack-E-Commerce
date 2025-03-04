@@ -19,7 +19,7 @@ const addToCart = (product) => {
 };
 </script>
 <template>
-  <div class="grid grid-cols-4 gap-x-12 gap-y-12">
+  <div class="grid grid-cols-4 gap-x-16 gap-y-12">
     <article
       v-for="product in products"
       :key="product.id"

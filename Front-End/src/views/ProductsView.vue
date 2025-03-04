@@ -169,7 +169,7 @@ function changePage(page) {
     </div>
 
     <!-- Products -->
-    <div class="max-w-[1520px] mx-auto relative top-4">
+    <div class="max-w-[1584px] mx-auto relative mt-24">
       <!-- Product Cards -->
       <div v-if="isLoading">
         <LoadingCards />

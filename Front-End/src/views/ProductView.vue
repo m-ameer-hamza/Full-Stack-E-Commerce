@@ -36,7 +36,7 @@ const addToCart = (product) => {
 </script>
 <template>
   <main>
-    <TrackBar />
+    <TrackBar :title="product.title" />
     <!-- Product Deatails -->
     <section class="max-w-[1600px] mx-auto relative top-8 mb-20">
       <div class="bg-white pt-9 pb-14 px-5 md:px-0">
@@ -126,9 +126,9 @@ const addToCart = (product) => {
                     aria-label="Select Yellow color"
                   ></button>
                 </div>
-                <div class="flex flex-wrap gap-12 mt-8 text-black">
+                <div class="flex flex-wrap gap-10 mt-8 text-black">
                   <div
-                    class="flex gap-9 px-3 py-3 text-base whitespace-nowrap bg-white rounded-xl border border-neutral-400"
+                    class="flex gap-7 px-3 py-3 text-base whitespace-nowrap bg-white rounded-xl border border-neutral-400"
                     role="group"
                     aria-label="Quantity selector"
                   >
@@ -173,6 +173,5 @@ const addToCart = (product) => {
     </section>
     <!-- Add a section for related products here -->
     <Banner />
-    <Footer />
   </main>
 </template>
