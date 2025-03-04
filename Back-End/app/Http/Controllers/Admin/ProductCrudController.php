@@ -62,7 +62,8 @@ class ProductCrudController extends CrudController
          * Fields can be defined using the fluent syntax:
          * - CRUD::field('price')->type('number');
          */
-         CRUD::modifyField('isFeatured', [
+        // Modify the isFeatured checkbox field.
+    CRUD::modifyField('isFeatured', [
         'name'    => 'isFeatured',
         'label'   => 'Featured',
         'type'    => 'checkbox',
